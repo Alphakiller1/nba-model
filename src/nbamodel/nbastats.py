@@ -146,8 +146,23 @@ def load(season: int, name: str) -> tuple[list[dict], str | None]:
     return d.get("rows", []), d.get("fetched_at_utc")
 
 
+def reachable(season: int) -> bool:
+    """One quick request: cloud runners the site refuses tend to hang, not refuse."""
+    try:
+        get("synergyplaytypes", {"LeagueID": "00", "PerMode": "PerGame", "PlayType": "Transition",
+                                 "PlayerOrTeam": "T", "SeasonType": "Regular Season",
+                                 "SeasonYear": season_label(season), "TypeGrouping": "offensive"},
+            attempts=1, timeout=10.0)
+        return True
+    except Blocked:
+        return False
+
+
 def refresh(season: int, log=print, pause: float = 0.6) -> dict[str, int]:
     """Pull every table for a season; a blocked pull keeps the previous snapshot."""
+    if not reachable(season):
+        log(f"nbastats {season}: stats.nba.com not reachable from here; keeping the snapshot")
+        return {}
     jobs: list[tuple[str, Any]] = []
     for who in ("T", "P"):
         for grouping in ("offensive", "defensive"):
@@ -167,14 +182,20 @@ def refresh(season: int, log=print, pause: float = 0.6) -> dict[str, int]:
     jobs.append(("bio", lambda: bio(season)))
     jobs.append(("teams", lambda: teams(season)))
     got = {}
+    misses = 0
     for name, fn in jobs:
         try:
             rows = fn()
+            misses = 0
             if rows:
                 save(season, name, rows)
                 got[name] = len(rows)
         except Blocked as exc:
+            misses += 1
             log(f"  nbastats {season} {name}: {exc}")
+            if misses >= 3:  # the site has stopped answering; keep every other snapshot as it is
+                log(f"nbastats {season}: three refusals in a row; stopping")
+                return got
         time.sleep(pause)
     try:
         team_rows = teams(season) if "teams" not in got else load(season, "teams")[0]
