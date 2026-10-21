@@ -1,0 +1,38 @@
+{
+ "season": "2025-26",
+ "method": "walk-forward; ratings refit before every game day",
+ "games": 1231,
+ "priced_games": 979,
+ "margin_mae": 11.17,
+ "total_mae": 14.995,
+ "brier": 0.2016,
+ "log_loss": 0.5887,
+ "winner_hit": 0.6921,
+ "model_margin_mae_priced": 11.439,
+ "market_margin_mae": 11.061,
+ "model_total_mae_priced": 15.035,
+ "market_total_mae": 14.664,
+ "spread_blend_weight": -0.206,
+ "total_blend_weight": 0.033,
+ "ats_gap_3": {
+  "bets": 289,
+  "wins": 134,
+  "pushes": 0,
+  "hit": 0.46366782006920415
+ },
+ "ats_gap_1": {
+  "bets": 702,
+  "wins": 329,
+  "pushes": 0,
+  "hit": 0.4686609686609687
+ },
+ "ou_gap_3": {
+  "bets": 472,
+  "wins": 237,
+  "hit": 0.5021186440677966
+ },
+ "early_margin_mae": 10.448,
+ "early_games": 156,
+ "margin_sd": 14.3,
+ "total_sd": 18.95
+}

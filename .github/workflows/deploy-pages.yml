@@ -1,0 +1,96 @@
+name: deploy-pages
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Injury designations move through the day and DraftKings quotes settle
+    # toward tip, so the board refreshes every two hours, and hourly through the
+    # US evening window (21:00-04:00 UTC) when games tip and go final. October
+    # through June only.
+    - cron: "17 */2 * 10-12,1-6 *"
+    - cron: "47 21-23,0-4 * 10-12,1-6 *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  # A Pages deploy that is mid-publish must finish; cancelling it produces
+  # "Deployment failed, try again later". Overlapping runs queue.
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install model
+        run: pip install .
+
+      # Finals never change: keep this season's box scores between runs so each
+      # game is fetched from ESPN once. Past seasons are committed.
+      - name: Restore the box-score cache
+        uses: actions/cache/restore@v5
+        with:
+          path: data/games
+          key: nba-games-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            nba-games-${{ runner.os }}-
+
+      - name: Build the board
+        env:
+          PYTHONIOENCODING: utf-8
+          PYTHONUNBUFFERED: "1"
+        # The ledger is recovered from the published site when _site has none,
+        # so an evicted cache never erases the season's record.
+        run: python -m nbamodel.cli build --out _site
+
+      - name: Post-build checks
+        run: |
+          python - <<'EOF'
+          import json
+          from pathlib import Path
+          from nbamodel import export
+          board = json.loads(Path('_site/board.json').read_text(encoding='utf-8'))
+          slate = json.loads(Path('_site/slate.json').read_text(encoding='utf-8'))
+          build = json.loads(Path('_site/build.json').read_text(encoding='utf-8'))
+          assert board['authority'] == 'RESEARCH_ONLY' and board['may_bet'] is False
+          for g in board['games']:
+              assert 'edge_points' in g and g['edge_points'] is None, g
+          assert not export.forbidden_keys(slate), 'model fields leaked into the public slate'
+          assert len(board['games']) == len(slate['games'])
+          html = Path('_site/index.html').read_text(encoding='utf-8')
+          assert html.index('id="authority"') < html.index('id="board"')
+          print(f"OK {board['slate_date']}: {len(board['games'])} games, build {build['state']} {build['issues']}")
+          EOF
+
+      - name: Save the box-score cache
+        if: always()
+        uses: actions/cache/save@v5
+        with:
+          path: data/games
+          key: nba-games-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
