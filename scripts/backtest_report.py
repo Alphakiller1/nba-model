@@ -86,7 +86,7 @@ report. The roster-shift backtest treats each club's first-ten-game players as
 its opening roster.
 """
     (ROOT / "reports").mkdir(exist_ok=True)
-    (ROOT / "reports" / "BACKTEST.md").write_text(md, encoding="utf-8")
+    (ROOT / "reports" / "TEAM_MODEL_CLOSE.md").write_text(md, encoding="utf-8")
     print(json.dumps(rec, indent=1))
     return 0
 

@@ -7,6 +7,7 @@ for an empty slate.
 """
 from __future__ import annotations
 
+import http.client
 import json
 import time
 import urllib.error
@@ -33,7 +34,10 @@ def get(url: str, *, attempts: int = 4, timeout: float = 20.0) -> Any:
         try:
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 return json.loads(resp.read().decode("utf-8"))
-        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, ConnectionError) as exc:
+        # IncompleteRead and friends (http.client.HTTPException) arrive mid-body
+        # when ESPN's edge drops a chunked response; they are retried too.
+        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, OSError,
+                http.client.HTTPException) as exc:
             last = exc
             time.sleep(0.6 * (i + 1))
     raise SourceError(f"{url}: {last}")

@@ -14,13 +14,13 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import authority, availability, features, ingest, live, teams
+from . import authority, availability, context, features, ingest, live, player_board, profiles, signals, teams
 from .backtest import season_end
 from .ratings import ABBRS, CONSTANTS, PARAMS, Ratings, fit, local_day, prior_from, project, rest_flags
 
 BOARD_SCHEMA = "nba-model/board/1"
 PUBLIC_SLATE_SCHEMA = "chase-public-slate/1"
-MODEL_VERSION = "nba-ratings-1.0"
+MODEL_VERSION = "nba-rapm-2.0"
 
 PUBLIC_FORBIDDEN = {
     "model_margin", "market_margin", "market_gap", "published_margin", "edge_points",
@@ -71,6 +71,29 @@ def _rest_days(games: list[ingest.Game], team: str, tip_utc: str) -> int | None:
     return (tip - max(prior)).days - 1 if prior else None
 
 
+def schedule_load(games: list[ingest.Game], team: str, home: str, tip_utc: str) -> dict[str, Any]:
+    """Tonight's travel and density for one club: the body's side of the schedule."""
+    tip = local_day(tip_utc)
+    seq = sorted((g for g in games if team in (g.home, g.away) and local_day(g.date_utc) < tip),
+                 key=lambda g: g.date_utc)
+    if not seq:
+        return {"games_last_7": 0, "three_in_four": False, "travel_miles": None, "tz_shift": None,
+                "miles_last_7": None, "altitude": home in context.HIGH and team != home}
+    last = seq[-1]
+    recent = [g for g in seq if (tip - local_day(g.date_utc)).days <= 7]
+    path = [g.home for g in recent] + [home]
+    miles7 = sum(context.km(a, b) for a, b in zip(path, path[1:])) * 0.621371
+    days = [local_day(g.date_utc) for g in seq[-2:]]
+    return {
+        "games_last_7": len(recent),
+        "three_in_four": len(days) == 2 and (tip - days[0]).days <= 3,
+        "travel_miles": round(context.km(last.home, home) * 0.621371),
+        "miles_last_7": round(miles7),
+        "tz_shift": context.ARENAS[home][2] - context.ARENAS[last.home][2],
+        "altitude": home in context.HIGH and team != home,
+    }
+
+
 def _round(v: float | None, n: int = 1) -> float | None:
     return None if v is None else round(v, n)
 
@@ -106,11 +129,43 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
         if inj.unavailable and inj.player_id:
             out_by_team.setdefault(inj.team, set()).add(inj.player_id)
 
+    try:
+        pm = player_board.build(season, as_of)
+    except Exception as exc:  # the team model still prices the slate
+        pm = None
+        issues.append(f"player model unavailable: {type(exc).__name__}: {exc}")
+    sig_record = signals.record()
+
     form_now = features.team_form(games, season)
     form_prev = features.team_form(prev_games, season - 1)
     team_of = {pid: t for t, people in roster.items() for pid in people}
     lines_now = features.player_lines(ingest.load_players(season), team_of if roster else None)
     lines_prev = features.player_lines(ingest.load_players(season - 1), team_of if roster else None)
+
+    # Matchup profiles: shot zones, play types, tracking, size, coach, style,
+    # regression watch and player profiles (profiles.py). A club reads on this
+    # season once it has a few games, else on last season for its current roster.
+    rotations = {}
+    for team in teams.all_abbrs():
+        now_lines = lines_now.get(team) or []
+        early = (form_now.get(team) or {}).get("games", 0) < 3
+        rotations[team] = (lines_prev.get(team) or now_lines) if early else now_lines
+    inj_map: dict[str, dict[str, str]] = {}
+    for inj in injury_rows:
+        if inj.player_id:
+            inj_map.setdefault(inj.team, {})[inj.player_id] = inj.status
+    try:
+        profile_basis = form_now if all((form_now.get(t) or {}).get("games", 0) >= profiles.MIN_GAMES
+                                        for t in playing_teams(fixtures)) else form_prev
+        try:
+            espn_coaches = (live.head_coaches(season), {})
+        except Exception as exc:  # the league's staff feed still names most coaches
+            espn_coaches = ({}, {})
+            issues.append(f"ESPN coaches unavailable: {type(exc).__name__}")
+        team_profiles, profile_prov = profiles.build_all(season, profile_basis, rotations, inj_map, espn_coaches)
+    except Exception as exc:  # the slate ships without the profile blocks
+        team_profiles, profile_prov = {}, {}
+        issues.append(f"matchup profiles unavailable: {type(exc).__name__}: {exc}")
 
     board_games: list[dict[str, Any]] = []
     public_games: list[dict[str, Any]] = []
@@ -130,7 +185,19 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             else:
                 adj[side], avail[side] = early_availability(people, pool, prev_vals)
         avail_margin = authority.AVAIL_SCALE * p.possessions / 100.0 * (adj["home"] - adj["away"])
-        model_margin = p.margin + avail_margin
+        team_margin = p.margin + avail_margin
+        # The player model (RAPM x tonight's rotation) is the primary forecast;
+        # the team model stands in when rosters or the fit are unavailable.
+        pj = None
+        if pm is not None and roster.get(f.home) and roster.get(f.away):
+            pj = player_board.project(pm, f.home, f.away,
+                                      set(roster[f.home]) - out_by_team.get(f.home, set()),
+                                      set(roster[f.away]) - out_by_team.get(f.away, set()),
+                                      p.possessions, f.neutral)
+        model_margin = pj["margin"] if pj else team_margin
+        model_total = pj["total"] if pj else p.total
+        home_pts = pj["home_pts"] if pj else p.home_pts + avail_margin / 2
+        away_pts = pj["away_pts"] if pj else p.away_pts - avail_margin / 2
         win_p = availability_win_prob(model_margin)
         book = f.book or {}
         market_margin = book.get("margin")
@@ -144,6 +211,8 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             "kickoff_utc": f.tip_utc, "game_state": f.state, "neutral": f.neutral,
             "away_record": f.away_record, "home_record": f.home_record,
             "away_score": f.away_score, "home_score": f.home_score,
+            "forecast_source": "player_rapm" if pj else "team_ratings",
+            "team_margin": _round(team_margin, 2), "team_total": _round(p.total, 1),
             "rating_margin": _round(p.margin, 2), "availability_margin": _round(avail_margin, 2),
             "model_margin": _round(model_margin, 2),
             "market_margin": market_margin, "published_margin": _round(published, 2),
@@ -151,11 +220,14 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             "edge_points": None,
             "edge_withheld_reason": authority.EDGE_WITHHELD,
             "win_probability": round(win_p, 4),
-            "projected_home_score": _round(p.home_pts + avail_margin / 2, 1),
-            "projected_away_score": _round(p.away_pts - avail_margin / 2, 1),
-            "projected_total": _round(p.total, 1), "projected_possessions": _round(p.possessions, 1),
+            "projected_home_score": _round(home_pts, 1),
+            "projected_away_score": _round(away_pts, 1),
+            "projected_total": _round(model_total, 1), "projected_possessions": _round(p.possessions, 1),
             "market_total": market_total,
-            "total_gap": None if market_total is None else _round(p.total - market_total, 1),
+            "total_gap": None if market_total is None else _round(model_total - market_total, 1),
+            "signals": signals.for_game(model_margin, market_margin, model_total, market_total,
+                                        f.home, f.away, sig_record) if f.state == "scheduled" else [],
+            "rotation": {"home": pj["home_rotation"], "away": pj["away_rotation"]} if pj else None,
             "home_b2b": bool(hb), "away_b2b": bool(ab),
             "availability": {"home": avail["home"][:6], "away": avail["away"][:6]},
             "book": book or None,
@@ -182,6 +254,8 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             public[f"{side}_game_log"] = features.game_log(games, team)
             public[f"{side}_players"] = (lines_now.get(team) or [])[:12]
             public[f"{side}_players_prior"] = (lines_prev.get(team) or [])[:12]
+            public[f"{side}_profile"] = team_profiles.get(team)
+            public[f"{side}_schedule"] = schedule_load(games or prev_games, team, f.home, f.tip_utc)
             public[f"{side}_injuries"] = [
                 {"player_id": i.player_id, "player_name": i.name, "status": i.status,
                  "detail": i.detail, "comment": i.note, "date": i.date, "return_date": i.return_date}
@@ -204,13 +278,16 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
                    "prior_net": round(prior.off[a] - prior.deff[a], 2),
                    "roster_shift": round(shift.get(a, 0.0), 2), "games": rating.games.get(a, 0)}
                   for a in sorted(ABBRS, key=lambda a: -rating.net(a))],
-        "games": board_games, "backtest": record,
+        "games": board_games, "backtest": record, "signals_record": sig_record,
+        "signal_note": ("A signal is a gap between the player model and the CURRENT DraftKings line. Its record "
+                        "was measured against the consensus OPENING line, 2023-24 to 2025-26; the model does not "
+                        "beat the closing line, so a signal read after the line has moved is worth less."),
         "sources": {"games": "ESPN game summaries (box score + DraftKings close)",
                     "slate": "ESPN scoreboard", "injuries": "ESPN injury report", "rosters": "ESPN team rosters"},
     }
     public_slate = {"schema": PUBLIC_SLATE_SCHEMA, "sport": "nba", "season": season, "slate_date": slate_date,
                     "generated_at_utc": generated, "data_through_utc": max((g.date_utc for g in games), default=None),
-                    "games": public_games}
+                    "profile_sources": profile_prov, "games": public_games}
     leaked = forbidden_keys(public_slate)
     if leaked:
         raise ValueError(f"public slate carries model fields: {sorted(leaked)}")
@@ -224,6 +301,10 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
 
 
 EARLY_GAMES = 3
+
+
+def playing_teams(fixtures) -> list[str]:
+    return sorted({t for f in fixtures for t in (f.home, f.away)})
 
 
 def early_availability(people: dict[str, str], pool: set[str],

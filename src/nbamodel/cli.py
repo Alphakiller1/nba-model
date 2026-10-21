@@ -11,16 +11,24 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import authority, export, ingest, ledger, site
+from . import authority, bulk, export, ingest, ledger, nbastats, site
 
 
 def _refresh(args: argparse.Namespace) -> int:
     season = export.current_season(datetime.now(timezone.utc))
-    # A finished season is refreshed only when its cache is missing.
+    # A finished season is refreshed only when its cache is missing. The
+    # current season's finals bring their stints (the player model's input).
     for s in range(season - 3, season):
-        if not ingest.load_games(s):
-            ingest.refresh(s, workers=args.workers)
-    ingest.refresh(season, workers=args.workers)
+        if not ingest.load_games(s) or not bulk.load_stints(s):
+            bulk.run(s, workers=args.workers)
+    bulk.run(season, workers=args.workers)
+    # stats.nba.com (play types, tracking, defender dashboard, shot locations,
+    # bio, staff) moves daily at most; it is refreshed every six hours, and a
+    # refused pull leaves the last snapshot in place.
+    _, fetched = nbastats.load(season, "synergy_T_offensive_Transition")
+    stale = not fetched or (datetime.now(timezone.utc) - datetime.fromisoformat(fetched)).total_seconds() > 6 * 3600
+    if stale:
+        nbastats.refresh(season)
     return 0
 
 
@@ -33,6 +41,10 @@ def _build(args: argparse.Namespace) -> int:
     rows = ledger.recover(out / "ledger.json")
     rows = ledger.grade(ledger.update(rows, board), ingest.load_games(season))
     record = ledger.write(out / "ledger.json", rows, board["generated_at_utc"])
+    # The live gate is read from the ledger the board has just updated.
+    board["live_signals"] = record["signals"]
+    board["unmet_gates"] = authority.unmet(record["signals"])
+    (out / "board.json").write_text(json.dumps(board, indent=1, default=str) + "\n", encoding="utf-8")
     (out / "index.html").write_text(site.render(board, record), encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
     graded = record["summary"].get("graded", 0)

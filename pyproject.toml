@@ -4,11 +4,11 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nba-model"
-version = "0.1.0"
-description = "Possession-based NBA team ratings with availability, rest and an explicit authority gate"
+version = "0.2.0"
+description = "NBA player-impact model (Bayesian RAPM on lineup stints) with early-line signals and an authority gate"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["numpy>=1.26", "tzdata; sys_platform == 'win32'"]
+dependencies = ["numpy>=1.26", "scipy>=1.11", "tzdata; sys_platform == 'win32'"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "ruff==0.15.20"]

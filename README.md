@@ -1,12 +1,14 @@
 # NBA Model
 
-NBA **research** model from the Chase Analytics model lab: possession-based team
-ratings, rest and availability terms, a nightly board against the DraftKings
-line, and a graded record.
+NBA research model from the Chase Analytics model lab: player-impact ratings
+(Bayesian RAPM on lineup stints with a Box Plus/Minus prior), schedule context,
+early-line signals against the DraftKings line, and a graded record of each.
 
 > Research software, not betting advice. The board is `RESEARCH_ONLY` and
-> `may_bet` is false: on the 2025-26 walk-forward holdout the model does **not**
-> beat the closing line (see [reports/BACKTEST.md](reports/BACKTEST.md)).
+> `may_bet` is false. Against the **closing** line the model has no edge. Against
+> the **opening** line its total signals have beaten break-even in each of three
+> seasons and the line moves toward it 61–72% of the time — see
+> [reports/BACKTEST.md](reports/BACKTEST.md). Promotion waits on a live record.
 
 **Live board:** https://alphakiller1.github.io/nba-model/ (`board.json`,
 `slate.json`, `build.json`, `ledger.json`), rebuilt on a schedule through the
@@ -22,24 +24,19 @@ season.
 
 ## What the model does
 
-1. **Ingest** — every final regular-season game from ESPN's game summary: team
-   box score, player lines and DraftKings' closing quote, cached in
-   `data/games/{season}_games.csv` and `_players.csv`. A final is fetched once.
-2. **Ratings** — weighted ridge regressions refit before every slate: each
-   club's points per 100 possessions scored and allowed, and possessions per
-   game. Games decay with a 45-day half-life; every club is pulled toward a
-   prior of last season's closing rating × 0.7, shifted for roster turnover.
-3. **League terms** — home court (+0.91 per 100 to the home offense, the same
-   off the road offense) and back-to-back (−1.54 scored, +1.33 allowed per
-   100), fitted on 2023-24 and 2024-25 with team-season fixed effects.
-4. **Availability** — each player's Game Score per minute, shrunk toward
-   replacement. A club is adjusted by the change between tonight's available
-   rotation (ESPN injury report: Out/Doubtful) and the rotation behind its
-   recent games.
-5. **Board** — projected score, total, possessions, home win probability
-   (normal, σ = 14.3), the DraftKings margin and total, and the gap.
-   `published_margin` is the market's when quoted; `edge_points` is always
-   `null` with a withheld reason.
+1. **Ingest** — every final since 2019-20 from ESPN's game summary: box score,
+   player lines and **lineup stints** from the play-by-play (`bulk.py`,
+   `stints.py`); every pregame book's open and close from ESPN's core odds API
+   (`markets.py`); Basketball-Reference advanced tables (`bbref.py`).
+2. **Player ratings** — offensive and defensive RAPM on stints, each player
+   pulled toward his prior-season Box Plus/Minus (`rapm.py`).
+3. **Tonight** — current roster minus ESPN's Out/Doubtful list, at each
+   player's recent minutes, times his ratings; pace from the possession team
+   model (`player_board.py`, `ratings.py`).
+4. **Signals** — gaps to the current DraftKings line big enough to have beaten
+   the opening line in the backtest, each with its record (`signals.py`).
+5. **Ledger** — the line each signal fired on and the closing line, so live
+   closing-line value is measured (`ledger.py`).
 
 ## Quick start
 
@@ -49,9 +46,13 @@ python -m venv .venv
 .\.venv\Scripts\nba-model refresh            # cache new finals
 .\.venv\Scripts\nba-model build --out _site  # board, slate, build, ledger, index.html
 .\.venv\Scripts\nba-model status             # authority + record
-python scripts\tune.py                       # hyperparameters on 2024-25, score 2025-26
-python scripts\roster_prior.py               # roster-turnover prior experiment
-python scripts\backtest_report.py            # writes data/backtest.json + reports/BACKTEST.md
+python -m nbamodel.bulk 2020 2021            # stints + box scores for past seasons
+python -m nbamodel.markets 2024 2025         # consensus open/close lines
+python -m nbamodel.dataset 2021 2022         # walk-forward feature rows
+python scripts\signals_record.py             # data/signals_backtest.json (open-line record)
+python scripts\open_edge.py                  # per-season open-line test
+python scripts\tune_rapm.py --season 2024    # RAPM settings sweep
+python scripts\backtest_report.py            # team model vs the close (reports/TEAM_MODEL_CLOSE.md)
 ```
 
 ## Verify

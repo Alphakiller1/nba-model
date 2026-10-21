@@ -42,6 +42,16 @@ def update(rows: list[dict[str, Any]], board: dict[str, Any]) -> list[dict[str, 
                                          "tip_utc": g["kickoff_utc"], "first_seen_utc": board["generated_at_utc"]})
         if row.get("final"):
             continue
+        # The line a signal was read against is frozen the first time the game
+        # is seen; the latest pre-tip snapshot is the close it is measured by.
+        if "first_market_margin" not in row:
+            row["first_market_margin"] = g.get("market_margin")
+            row["first_market_total"] = g.get("market_total")
+        if not row.get("signals") and g.get("signals"):
+            row["signals"] = [{k: sg[k] for k in ("market", "side", "tier", "gap", "line")} |
+                              {"seen_utc": board["generated_at_utc"],
+                               "market_margin": g.get("market_margin"), "market_total": g.get("market_total")}
+                              for sg in g["signals"]]
         row.update({k: g.get(k) for k in KEEP})
         row["snapshot_utc"] = board["generated_at_utc"]
     return sorted(by_id.values(), key=lambda r: (r.get("tip_utc", ""), r["event_id"]))
@@ -86,8 +96,40 @@ def summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def signal_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Live record of signals: graded against the line each was read at, and CLV to the close."""
+    wins = graded = clv_n = clv_good = 0
+    for r in rows:
+        for sg in r.get("signals") or []:
+            if sg["market"] == "total":
+                at, close = sg.get("market_total"), r.get("market_total")
+                over = sg["side"] == "over"
+                if close is not None and at is not None and close != at:
+                    clv_n += 1
+                    clv_good += 1 if (close > at) == over else 0
+                if r.get("final") and at is not None:
+                    tot = r["final"]["home_pts"] + r["final"]["away_pts"]
+                    if tot != at:
+                        graded += 1
+                        wins += 1 if (tot > at) == over else 0
+            else:
+                at, close = sg.get("market_margin"), r.get("market_margin")
+                home_side = sg["side"] == r["home"]
+                if close is not None and at is not None and close != at:
+                    clv_n += 1
+                    clv_good += 1 if (close > at) == home_side else 0
+                if r.get("final") and at is not None:
+                    m = r["final"]["home_pts"] - r["final"]["away_pts"]
+                    if m != at:
+                        graded += 1
+                        wins += 1 if (m > at) == home_side else 0
+    return {"signals": graded, "wins": wins, "hit": round(wins / graded, 4) if graded else None,
+            "clv_moved": clv_n, "clv_toward": round(clv_good / clv_n, 4) if clv_n else None}
+
+
 def write(path: Path, rows: list[dict[str, Any]], generated: str) -> dict[str, Any]:
-    payload = {"schema": "nba-model/ledger/1", "generated_at_utc": generated, "summary": summary(rows),
+    payload = {"schema": "nba-model/ledger/2", "generated_at_utc": generated, "summary": summary(rows),
+               "signals": signal_summary(rows),
                "games": rows}
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8")

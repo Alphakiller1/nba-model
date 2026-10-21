@@ -181,3 +181,35 @@ def rosters(abbrs: list[str]) -> dict[str, dict[str, str]]:
 
     with ThreadPoolExecutor(max_workers=8) as pool:
         return dict(pool.map(one, abbrs))
+
+
+CORE = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba"
+COACH_CACHE = __import__("pathlib").Path(__file__).resolve().parents[2] / "data" / "coaches"
+
+
+def head_coaches(season: int, max_age_hours: float = 24.0) -> dict[str, dict[str, Any]]:
+    """{team: {name, experience}} from ESPN's core API, cached a day per season."""
+    import json as _json
+    import time as _time
+    path = COACH_CACHE / f"{season}.json"
+    if path.exists() and _time.time() - path.stat().st_mtime < max_age_hours * 3600:
+        return _json.loads(path.read_text(encoding="utf-8"))
+
+    def one(abbr: str) -> tuple[str, dict[str, Any] | None]:
+        try:
+            lst = espn.get(f"{CORE}/seasons/{season}/teams/{teams.team_id(abbr)}/coaches")
+            items = lst.get("items") or []
+            if not items:
+                return abbr, None
+            c = espn.get(str(items[0]["$ref"]).replace("http://", "https://"))
+            return abbr, {"name": " ".join(x for x in (c.get("firstName"), c.get("lastName")) if x),
+                          "experience": c.get("experience")}
+        except espn.SourceError:
+            return abbr, None
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        out = {a: v for a, v in pool.map(one, teams.all_abbrs()) if v}
+    if out:
+        COACH_CACHE.mkdir(parents=True, exist_ok=True)
+        path.write_text(_json.dumps(out, indent=1) + "\n", encoding="utf-8")
+    return out

@@ -125,10 +125,16 @@ def test_public_slate_boundary_rejects_model_fields():
 
 def test_authority_is_research_only_and_withholds_edges():
     assert authority.LEVEL == "RESEARCH_ONLY"
-    assert "live_record" in authority.UNMET_GATES
+    assert "live_clv" in authority.UNMET_GATES  # no live record yet
     rec = authority.record()
     assert rec["model_margin_mae_priced"] > rec["market_margin_mae"]  # the record says so
-    assert "beats_close_margin" in authority.UNMET_GATES
+    assert "beats_close" in authority.UNMET_GATES
+
+
+def test_live_gate_needs_volume_clv_and_wins():
+    assert "live_clv" in authority.unmet({"signals": 40, "clv_toward": 0.8, "hit": 0.7})
+    assert "live_clv" in authority.unmet({"signals": 400, "clv_toward": 0.50, "hit": 0.6})
+    assert "live_clv" not in authority.unmet({"signals": 400, "clv_toward": 0.61, "hit": 0.55})
 
 
 def test_ledger_freezes_at_tip_and_grades():

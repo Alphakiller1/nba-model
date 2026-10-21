@@ -22,7 +22,7 @@ jobs:
           python - <<'EOF'
           from nbamodel import authority, ratings
           assert authority.LEVEL == 'RESEARCH_ONLY'
-          assert 'live_record' in authority.UNMET_GATES
+          assert 'live_clv' in authority.UNMET_GATES
           c = ratings.CONSTANTS
           # Every fitted term must carry the sign basketball says it should.
           assert c.home_eff > 0 and c.b2b_off < 0 and c.b2b_def > 0

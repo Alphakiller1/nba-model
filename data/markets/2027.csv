@@ -1,0 +1,4 @@
+event_id,books,spread_open,spread_close,total_open,total_close,home_ml_open,home_ml_close,away_ml_open,away_ml_close
+401909088,1,-2.5,1.5,224.5,220.5,-125.0,105.0,105.0,-125.0
+401909089,1,-3.5,-4.5,229.5,231.5,-170.0,-175.0,142.0,145.0
+401909090,1,-1.5,1.5,228.5,229.5,-125.0,-102.0,105.0,-118.0
