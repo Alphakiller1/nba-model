@@ -28,7 +28,7 @@ h1{font-size:30px}h2{font-size:21px;margin-top:32px}p{color:var(--text-2);margin
 .scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}
 th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
 th:first-child,td:first-child{text-align:left}th{color:var(--text-2);font-weight:600}
-.pos{color:var(--pos)}.neg{color:var(--neg)}footer{color:var(--text-2);font-size:12px;margin-top:40px}
+.bd-sig b{color:var(--brand)}.pos{color:var(--pos)}.neg{color:var(--neg)}footer{color:var(--text-2);font-size:12px;margin-top:40px}
 a{color:var(--brand)}
 """
 
@@ -51,14 +51,19 @@ def _card(g: dict[str, Any]) -> str:
         ("Projected score", f"{_f(g.get('projected_away_score'))} – {_f(g.get('projected_home_score'))}"),
         ("Projected total / DK", f"{_f(g.get('projected_total'))} / {_f(g.get('market_total'))}"),
         ("Home win probability", "—" if wp is None else f"{wp:.0%}"),
-        ("Availability (pts)", _f(g.get("availability_margin"), 1, True)),
+        ("Team-model margin / total", f"{_f(g.get('team_margin'), 1, True)} / {_f(g.get('team_total'))}"),
     ]
+    sigs = "".join(
+        f'<div class="bd-row bd-sig"><span>{escape(sg["tier"].title())} {escape(sg["market"])} · '
+        f'{escape(str(sg["side"]).upper())}</span><b>gap {sg["gap"]:+.1f} · '
+        f'{(sg.get("backtest") or {}).get("hit", 0):.1%} vs open on {(sg.get("backtest") or {}).get("bets", 0)}</b></div>'
+        for sg in g.get("signals") or [])
     rest = [t for t, b in ((g["away"], g.get("away_b2b")), (g["home"], g.get("home_b2b"))) if b]
     return (f'<article class="bd-card"><div class="bd-teams">{side(g["away"])}<span>@</span>{side(g["home"])}</div>'
             f'<div class="bd-status">{escape(g.get("game_state", ""))} · {escape(g.get("kickoff_utc", ""))}'
             f'{" · back-to-back: " + escape(", ".join(rest)) if rest else ""}</div>'
             + "".join(f'<div class="bd-row"><span>{escape(k)}</span><b>{escape(v)}</b></div>' for k, v in rows)
-            + '<div class="bd-row"><span>Status</span><b class="bd-status is-neutral">MONITOR</b></div></article>')
+            + (sigs or '<div class="bd-row"><span>Signals</span><b>none</b></div>') + '</article>')
 
 
 def _live(live: dict[str, Any]) -> str:
@@ -67,9 +72,24 @@ def _live(live: dict[str, Any]) -> str:
     return f", margin MAE {live.get('margin_mae')}, Brier {live.get('brier')}"
 
 
+def _signal_rows(sig: dict[str, Any]) -> str:
+    rows = []
+    for market in ("total", "spread"):
+        for tier, r in (sig.get(market) or {}).items():
+            band = r["gap_band"]
+            seasons = " / ".join(f"{(v.get('hit') or 0):.1%}" for v in r["by_season"].values())
+            rows.append(f"<tr><td>{escape(market.title())} {escape(tier)}</td><td>{band[0]:g}"
+                        f"{'–' + format(band[1], 'g') if band[1] else '+'}</td><td>{r['bets']}</td>"
+                        f"<td>{r['hit']:.1%}</td><td>{r['hit_90ci'][0]:.1%}–{r['hit_90ci'][1]:.1%}</td>"
+                        f"<td>{r['clv_toward']:.0%}</td><td>{seasons}</td></tr>")
+    return "".join(rows)
+
+
 def render(board: dict[str, Any], ledger_payload: dict[str, Any]) -> str:
     rec = board.get("backtest") or {}
     live = ledger_payload.get("summary") or {}
+    live_sig = ledger_payload.get("signals") or {}
+    sig_rows = _signal_rows(board.get("signals_record") or {})
     gates = "".join(f"<li>{escape(g)}</li>" for g in board.get("unmet_gates", []))
     cards = "".join(_card(g) for g in board.get("games", [])) or "<p>No games on this slate.</p>"
     team_rows = "".join(
@@ -96,16 +116,23 @@ allowed (lower is better). Prior is last season regressed {board["constants"].ge
 <div class="scroll"><table><thead><tr><th>Team</th><th>Net</th><th>Off</th><th>Def</th><th>Pace</th><th>Prior net</th>
 <th>Roster shift</th><th>GP</th></tr></thead><tbody>{team_rows}</tbody></table></div></section>
 <section id="record"><h2>Record</h2>
-<p>2025-26 walk-forward holdout: margin MAE {rec.get("model_margin_mae_priced")} vs DraftKings close
+<p>Signals against the consensus opening line, 2023-24 to 2025-26, fit-free (break-even 52.4%):</p>
+<div class="scroll"><table><thead><tr><th>Signal</th><th>Gap</th><th>Bets</th><th>Hit vs open</th><th>90% interval</th>
+<th>Line moved toward model</th><th>By season</th></tr></thead><tbody>{sig_rows}</tbody></table></div>
+<p>Live signals this season: {live_sig.get("signals", 0)} graded{"" if not live_sig.get("signals") else
+f", {live_sig['hit']:.1%} at the line they fired on"}; {live_sig.get("clv_moved", 0)} lines moved{"" if not
+live_sig.get("clv_moved") else f", {live_sig['clv_toward']:.0%} toward the model"}.</p>
+<p>Against the CLOSE, 2025-26 holdout: margin MAE {rec.get("model_margin_mae_priced")} vs DraftKings close
 {rec.get("market_margin_mae")} ({rec.get("priced_games")} priced games); total MAE {rec.get("model_total_mae_priced")}
 vs {rec.get("market_total_mae")}; Brier {rec.get("brier")}.</p>
 <p>Live this season: {live.get("graded", 0)} graded games{_live(live)}.</p></section>
 <section id="methodology"><h2>Methodology</h2>
-<p>Weighted ridge regressions on ESPN box scores: each club's points per 100 possessions scored and allowed, and
-possessions per game, refit before every slate with a {board["constants"].get("half_life_days"):.0f}-day half-life
-and pulled toward a prior from last season. League-wide home-court and back-to-back terms are fitted on 2023-24 and
-2024-25. Tonight's rotation adjusts each club for players listed Out or Doubtful on ESPN's injury report. See
-<a href="https://github.com/Alphakiller1/nba-model">the repository</a> for the backtest.</p></section>
+<p>Player model: offensive and defensive RAPM fitted on every lineup stint of this season and last (ESPN
+play-by-play), pulled toward each player's prior-season Box Plus/Minus (Basketball-Reference). Tonight's club is the
+current roster minus players listed Out or Doubtful, at each player's recent minutes; pace comes from a possession
+team model. A signal is a gap to the current DraftKings line large enough to have beaten the OPENING line in the
+backtest. Nothing here has beaten the closing line. See
+<a href="https://github.com/Alphakiller1/nba-model">the repository</a> (reports/BACKTEST.md).</p></section>
 <footer>Chase Analytics · research only ·
 If you or someone you know has a gambling problem, call 1-800-GAMBLER.</footer>
 </main></body></html>

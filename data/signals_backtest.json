@@ -1,0 +1,94 @@
+{
+ "method": "fit-free gap vs consensus opening line; moves > 5 (spread) / > 8 (total) removed",
+ "seasons": [
+  "2023-24",
+  "2024-25",
+  "2025-26"
+ ],
+ "breakeven": 0.5238,
+ "spread": {
+  "strong": {
+   "gap_band": [
+    6.0,
+    null
+   ],
+   "bets": 349,
+   "hit": 0.5415,
+   "hit_90ci": [
+    0.4986,
+    0.5874
+   ],
+   "clv_toward": 0.6119,
+   "by_season": {
+    "2024": {
+     "bets": 119,
+     "hit": 0.5378
+    },
+    "2025": {
+     "bets": 124,
+     "hit": 0.5484
+    },
+    "2026": {
+     "bets": 106,
+     "hit": 0.5377
+    }
+   }
+  }
+ },
+ "total": {
+  "strong": {
+   "gap_band": [
+    7.0,
+    null
+   ],
+   "bets": 404,
+   "hit": 0.5668,
+   "hit_90ci": [
+    0.5248,
+    0.6064
+   ],
+   "clv_toward": 0.7246,
+   "by_season": {
+    "2024": {
+     "bets": 179,
+     "hit": 0.5307
+    },
+    "2025": {
+     "bets": 131,
+     "hit": 0.6183
+    },
+    "2026": {
+     "bets": 94,
+     "hit": 0.5638
+    }
+   }
+  },
+  "lean": {
+   "gap_band": [
+    3.0,
+    7.0
+   ],
+   "bets": 1349,
+   "hit": 0.5404,
+   "hit_90ci": [
+    0.5174,
+    0.5626
+   ],
+   "clv_toward": 0.6139,
+   "by_season": {
+    "2024": {
+     "bets": 442,
+     "hit": 0.543
+    },
+    "2025": {
+     "bets": 456,
+     "hit": 0.5373
+    },
+    "2026": {
+     "bets": 451,
+     "hit": 0.541
+    }
+   }
+  }
+ }
+}

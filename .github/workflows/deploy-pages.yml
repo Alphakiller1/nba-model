@@ -37,12 +37,14 @@ jobs:
       - name: Install model
         run: pip install .
 
-      # Finals never change: keep this season's box scores between runs so each
-      # game is fetched from ESPN once. Past seasons are committed.
+      # Finals never change: keep this season's box scores and stints between
+      # runs so each game is fetched from ESPN once. Past seasons are committed.
       - name: Restore the box-score cache
         uses: actions/cache/restore@v5
         with:
-          path: data/games
+          path: |
+            data/games
+            data/stints
           key: nba-games-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
             nba-games-${{ runner.os }}-
@@ -78,7 +80,9 @@ jobs:
         if: always()
         uses: actions/cache/save@v5
         with:
-          path: data/games
+          path: |
+            data/games
+            data/stints
           key: nba-games-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - uses: actions/upload-pages-artifact@v3

@@ -14,13 +14,13 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import authority, availability, features, ingest, live, teams
+from . import authority, availability, features, ingest, live, player_board, signals, teams
 from .backtest import season_end
 from .ratings import ABBRS, CONSTANTS, PARAMS, Ratings, fit, local_day, prior_from, project, rest_flags
 
 BOARD_SCHEMA = "nba-model/board/1"
 PUBLIC_SLATE_SCHEMA = "chase-public-slate/1"
-MODEL_VERSION = "nba-ratings-1.0"
+MODEL_VERSION = "nba-rapm-2.0"
 
 PUBLIC_FORBIDDEN = {
     "model_margin", "market_margin", "market_gap", "published_margin", "edge_points",
@@ -106,6 +106,13 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
         if inj.unavailable and inj.player_id:
             out_by_team.setdefault(inj.team, set()).add(inj.player_id)
 
+    try:
+        pm = player_board.build(season, as_of)
+    except Exception as exc:  # the team model still prices the slate
+        pm = None
+        issues.append(f"player model unavailable: {type(exc).__name__}: {exc}")
+    sig_record = signals.record()
+
     form_now = features.team_form(games, season)
     form_prev = features.team_form(prev_games, season - 1)
     team_of = {pid: t for t, people in roster.items() for pid in people}
@@ -130,7 +137,19 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             else:
                 adj[side], avail[side] = early_availability(people, pool, prev_vals)
         avail_margin = authority.AVAIL_SCALE * p.possessions / 100.0 * (adj["home"] - adj["away"])
-        model_margin = p.margin + avail_margin
+        team_margin = p.margin + avail_margin
+        # The player model (RAPM x tonight's rotation) is the primary forecast;
+        # the team model stands in when rosters or the fit are unavailable.
+        pj = None
+        if pm is not None and roster.get(f.home) and roster.get(f.away):
+            pj = player_board.project(pm, f.home, f.away,
+                                      set(roster[f.home]) - out_by_team.get(f.home, set()),
+                                      set(roster[f.away]) - out_by_team.get(f.away, set()),
+                                      p.possessions, f.neutral)
+        model_margin = pj["margin"] if pj else team_margin
+        model_total = pj["total"] if pj else p.total
+        home_pts = pj["home_pts"] if pj else p.home_pts + avail_margin / 2
+        away_pts = pj["away_pts"] if pj else p.away_pts - avail_margin / 2
         win_p = availability_win_prob(model_margin)
         book = f.book or {}
         market_margin = book.get("margin")
@@ -144,6 +163,8 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             "kickoff_utc": f.tip_utc, "game_state": f.state, "neutral": f.neutral,
             "away_record": f.away_record, "home_record": f.home_record,
             "away_score": f.away_score, "home_score": f.home_score,
+            "forecast_source": "player_rapm" if pj else "team_ratings",
+            "team_margin": _round(team_margin, 2), "team_total": _round(p.total, 1),
             "rating_margin": _round(p.margin, 2), "availability_margin": _round(avail_margin, 2),
             "model_margin": _round(model_margin, 2),
             "market_margin": market_margin, "published_margin": _round(published, 2),
@@ -151,11 +172,14 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             "edge_points": None,
             "edge_withheld_reason": authority.EDGE_WITHHELD,
             "win_probability": round(win_p, 4),
-            "projected_home_score": _round(p.home_pts + avail_margin / 2, 1),
-            "projected_away_score": _round(p.away_pts - avail_margin / 2, 1),
-            "projected_total": _round(p.total, 1), "projected_possessions": _round(p.possessions, 1),
+            "projected_home_score": _round(home_pts, 1),
+            "projected_away_score": _round(away_pts, 1),
+            "projected_total": _round(model_total, 1), "projected_possessions": _round(p.possessions, 1),
             "market_total": market_total,
-            "total_gap": None if market_total is None else _round(p.total - market_total, 1),
+            "total_gap": None if market_total is None else _round(model_total - market_total, 1),
+            "signals": signals.for_game(model_margin, market_margin, model_total, market_total,
+                                        f.home, f.away, sig_record) if f.state == "scheduled" else [],
+            "rotation": {"home": pj["home_rotation"], "away": pj["away_rotation"]} if pj else None,
             "home_b2b": bool(hb), "away_b2b": bool(ab),
             "availability": {"home": avail["home"][:6], "away": avail["away"][:6]},
             "book": book or None,
@@ -204,7 +228,10 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
                    "prior_net": round(prior.off[a] - prior.deff[a], 2),
                    "roster_shift": round(shift.get(a, 0.0), 2), "games": rating.games.get(a, 0)}
                   for a in sorted(ABBRS, key=lambda a: -rating.net(a))],
-        "games": board_games, "backtest": record,
+        "games": board_games, "backtest": record, "signals_record": sig_record,
+        "signal_note": ("A signal is a gap between the player model and the CURRENT DraftKings line. Its record "
+                        "was measured against the consensus OPENING line, 2023-24 to 2025-26; the model does not "
+                        "beat the closing line, so a signal read after the line has moved is worth less."),
         "sources": {"games": "ESPN game summaries (box score + DraftKings close)",
                     "slate": "ESPN scoreboard", "injuries": "ESPN injury report", "rosters": "ESPN team rosters"},
     }
