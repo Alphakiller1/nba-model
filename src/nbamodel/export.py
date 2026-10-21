@@ -184,7 +184,7 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             public[f"{side}_players_prior"] = (lines_prev.get(team) or [])[:12]
             public[f"{side}_injuries"] = [
                 {"player_id": i.player_id, "player_name": i.name, "status": i.status,
-                 "detail": i.detail, "note": i.note, "date": i.date, "return_date": i.return_date}
+                 "detail": i.detail, "comment": i.note, "date": i.date, "return_date": i.return_date}
                 for i in injury_rows if i.team == team]
         public_games.append(public)
 
