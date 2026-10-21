@@ -30,5 +30,15 @@ jobs:
           EOF
       - name: live board builds
         # This step DOES hit ESPN: a broken source is a real deploy failure and
-        # CI should find it before Pages does.
-        run: python -m nbamodel.cli build --out _smoke
+        # CI should find it before Pages does. A degraded build fails here too.
+        run: |
+          python -m nbamodel.cli build --out _smoke
+          python - <<'PY'
+          import json
+          b = json.load(open('_smoke/build.json'))
+          assert b['state'] == 'ok', b['issues']
+          assert b['cached_games'] >= 0
+          from nbamodel import ingest
+          assert len(ingest.load_games(b['season'] - 1)) > 1000, 'history not found under data/'
+          print('build ok', b)
+          PY

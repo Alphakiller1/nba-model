@@ -34,8 +34,11 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+      # Editable: the model reads its committed history from data/ beside src/.
+      # A plain install put the package in site-packages, every data path
+      # pointed there, and boards were built with no past seasons at all.
       - name: Install model
-        run: pip install .
+        run: pip install -e .
 
       # Finals never change: keep this season's box scores and stints between
       # runs so each game is fetched from ESPN once. Past seasons are committed.
