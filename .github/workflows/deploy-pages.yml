@@ -45,6 +45,9 @@ jobs:
           path: |
             data/games
             data/stints
+            data/shots
+            data/nbastats
+            data/coaches
           key: nba-games-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
             nba-games-${{ runner.os }}-
@@ -83,6 +86,9 @@ jobs:
           path: |
             data/games
             data/stints
+            data/shots
+            data/nbastats
+            data/coaches
           key: nba-games-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - uses: actions/upload-pages-artifact@v3

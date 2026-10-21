@@ -34,8 +34,9 @@ Weighted least squares, weight = possessions × `0.5 ^ (age/120 days)`, last
 season's stints × 0.35, with a ridge of 1,500 possessions pulling every player
 toward his **prior**:
 
-* `0.8 × (OBPM, DBPM)` from last season (or the season before), shrunk by
-  minutes `m/(m+500)` toward a default of (−1.5, −0.5);
+* `0.8 × (OBPM, DBPM)` from last season (or the season before), each moved by
+  the league aging curve for the player's age, shrunk by minutes `m/(m+500)`
+  toward a default of (−1.5, −0.5);
 * the default itself for players with under 150 minutes or no record.
 
 Refit weekly in backtests, before every build live.
@@ -55,6 +56,29 @@ possessions per game, 45-day half-life, prior = last season × 0.7 plus a roster
 shift; home court +0.91 per 100, back-to-back −1.54 scored / +1.33 allowed. It
 supplies pace, appears on the board as `team_margin`/`team_total`, and prices
 the slate if rosters or the player fit are unavailable.
+
+## Aging curve (`aging.py`)
+
+The delta method on Basketball-Reference advanced tables, 2018-19 to the last
+completed season: for every player in consecutive seasons (250+ minutes in
+each), the change in OBPM and DBPM by age, weighted by the harmonic mean of his
+minutes, smoothed with a quadratic and held flat past its lowest point. It
+gives about +1.0 OBPM a year at 19-20, a plateau at 25-26 and about −0.4 a year
+from 30; defense moves far less.
+
+## Matchup profiles (`profiles.py`, public slate)
+
+Facts only, each ranked of 30 and labelled with the season it is read on (last
+season until a club has five games): shot locations by zone, own and allowed
+(stats.nba.com); shot kinds and transition from ESPN play-by-play; eleven Synergy
+play types, offense and defense; Second Spectrum speed, distance, drives,
+catch-and-shoot, pull-ups and post touches; minutes-weighted rotation height,
+weight and age; head coach (ESPN) and staff; style tags where a club ranks top
+or bottom five; a regression watch (opponent three-point and free-throw luck,
+close-game record, wins against point differential); and per player his zones,
+top play types, defender dashboard by distance, tracking, age-curve position and
+three-point record against earlier seasons. `nbastats.py` keeps the last
+snapshot of every stats.nba.com table when the site cannot be reached.
 
 ## Schedule context
 

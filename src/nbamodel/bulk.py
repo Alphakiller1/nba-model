@@ -19,7 +19,12 @@ from pathlib import Path
 from . import espn, ingest, stints
 
 STINTS = Path(__file__).resolve().parents[2] / "data" / "stints"
+SHOTS = Path(__file__).resolve().parents[2] / "data" / "shots"
 STINT_FIELDS = [f.name for f in fields(stints.Stint)]
+SHOT_FIELDS = [f.name for f in fields(stints.Shot)]
+# Shots (with the ten on the floor) are kept for these seasons onward; older
+# seasons need only stints.
+FIRST_SHOT_SEASON = 2026
 
 
 def stint_path(season: int) -> Path:
@@ -34,17 +39,41 @@ def load_stints(season: int) -> list[dict[str, str]]:
         return list(csv.DictReader(fh))
 
 
-def _write_stints(season: int, rows: list[dict]) -> None:
-    STINTS.mkdir(parents=True, exist_ok=True)
+def _write_gz(path: Path, names: list[str], rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     buf = io.StringIO()
-    w = csv.DictWriter(buf, fieldnames=STINT_FIELDS, lineterminator="\n")
+    w = csv.DictWriter(buf, fieldnames=names, lineterminator="\n")
     w.writeheader()
     for r in rows:
         w.writerow(r)
-    tmp = stint_path(season).with_suffix(".tmp")
+    tmp = path.with_suffix(".tmp")
     with gzip.open(tmp, "wt", encoding="utf-8", newline="") as fh:
         fh.write(buf.getvalue())
-    tmp.replace(stint_path(season))
+    tmp.replace(path)
+
+
+def _write_stints(season: int, rows: list[dict]) -> None:
+    _write_gz(stint_path(season), STINT_FIELDS, rows)
+
+
+def shot_path(season: int) -> Path:
+    return SHOTS / f"{season}.csv.gz"
+
+
+def load_shots(season: int) -> list[dict[str, str]]:
+    path = shot_path(season)
+    if not path.exists():
+        return []
+    with gzip.open(path, "rt", encoding="utf-8", newline="") as fh:
+        return list(csv.DictReader(fh))
+
+
+def _shot_row(s: stints.Shot) -> dict:
+    d = {k: getattr(s, k) for k in SHOT_FIELDS}
+    d["offense"] = "|".join(s.offense)
+    d["defense"] = "|".join(s.defense)
+    d["distance"] = round(s.distance, 1)
+    return d
 
 
 def _row(s: stints.Stint) -> dict:
@@ -61,11 +90,17 @@ def run(season: int, workers: int = 10, log=print) -> None:
     have_players = {r["event_id"] for r in players}
     st_rows = load_stints(season)
     have_stints = {r["event_id"] for r in st_rows}
+    want_shots = season >= FIRST_SHOT_SEASON
+    sh_rows = load_shots(season) if want_shots else []
+    have_shots = {r["event_id"] for r in sh_rows}
     events = [e["id"] for e in ingest.season_events(season) if e["completed"]]
-    # A game is complete only with its box score AND its stints; an interrupted
-    # run can leave stints written for games whose box rows were not.
-    todo = [e for e in events if e not in have_stints or e not in games]
-    st_rows = [r for r in st_rows if r["event_id"] in games]
+    # A game is complete only with its box score AND its stints (and, for
+    # recent seasons, its shots); an interrupted run can leave one without the
+    # other, so the game is fetched again and its partial rows replaced.
+    todo = [e for e in events if e not in have_stints or e not in games or (want_shots and e not in have_shots)]
+    redo = set(todo)
+    st_rows = [r for r in st_rows if r["event_id"] in games and r["event_id"] not in redo]
+    sh_rows = [r for r in sh_rows if r["event_id"] not in redo]
     log(f"{season}: {len(events)} finals, {len(have_stints)} with stints, {len(todo)} to fetch")
 
     def one(eid):
@@ -89,16 +124,23 @@ def run(season: int, workers: int = 10, log=print) -> None:
                 games[eid] = {k: getattr(game, k) for k in ingest.GAME_FIELDS}
             if eid not in have_players:
                 players.extend({k: getattr(p, k) for k in ingest.PLAYER_FIELDS} for p in lines)
-            st_rows.extend(_row(s) for s in stints.parse(eid, data))
+            st, sh = stints.parse_all(eid, data)
+            st_rows.extend(_row(s) for s in st)
+            if want_shots:
+                sh_rows.extend(_shot_row(s) for s in sh)
             done += 1
             if done % 200 == 0:
                 log(f"  {season}: {done}/{len(todo)}")
                 _write_stints(season, st_rows)
+                if want_shots:
+                    _write_gz(shot_path(season), SHOT_FIELDS, sh_rows)
     ingest._write(ingest._path(season, "games"), ingest.GAME_FIELDS,
                   sorted(games.values(), key=lambda r: (r["date_utc"], r["event_id"])))
     ingest._write(ingest._path(season, "players"), ingest.PLAYER_FIELDS, players)
     _write_stints(season, st_rows)
-    log(f"{season}: done, {len(games)} games, {len(st_rows)} stints")
+    if want_shots:
+        _write_gz(shot_path(season), SHOT_FIELDS, sh_rows)
+    log(f"{season}: done, {len(games)} games, {len(st_rows)} stints, {len(sh_rows)} shots")
 
 
 if __name__ == "__main__":

@@ -37,6 +37,7 @@ class RapmParams:
     rookie_def: float = -0.5
     prev_season_weight: float = 0.35  # last season's stints count this much
     half_life_days: float = 120.0
+    aging: bool = True                # move last season's BPM by the league aging curve (aging.py)
 
 
 @dataclass
@@ -94,6 +95,10 @@ def priors(season: int, names: dict[str, str], p: RapmParams) -> dict[str, tuple
         if ob is None or mp < 150:
             out[pid] = (p.rookie_off, p.rookie_def)
             continue
+        if p.aging:
+            from . import aging
+            do, dd = aging.curve().delta(float(row["age"]) if row.get("age") else None)
+            ob, db = ob + do, db + dd
         # BPM on few minutes is noise: shrink toward the rookie default by minutes.
         trust = mp / (mp + 500.0)
         out[pid] = (p.bpm_weight * (trust * ob + (1 - trust) * p.rookie_off / p.bpm_weight),

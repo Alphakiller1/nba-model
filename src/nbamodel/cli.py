@@ -11,7 +11,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import authority, bulk, export, ingest, ledger, site
+from . import authority, bulk, export, ingest, ledger, nbastats, site
 
 
 def _refresh(args: argparse.Namespace) -> int:
@@ -22,6 +22,13 @@ def _refresh(args: argparse.Namespace) -> int:
         if not ingest.load_games(s) or not bulk.load_stints(s):
             bulk.run(s, workers=args.workers)
     bulk.run(season, workers=args.workers)
+    # stats.nba.com (play types, tracking, defender dashboard, shot locations,
+    # bio, staff) moves daily at most; it is refreshed every six hours, and a
+    # refused pull leaves the last snapshot in place.
+    _, fetched = nbastats.load(season, "synergy_T_offensive_Transition")
+    stale = not fetched or (datetime.now(timezone.utc) - datetime.fromisoformat(fetched)).total_seconds() > 6 * 3600
+    if stale:
+        nbastats.refresh(season)
     return 0
 
 

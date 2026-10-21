@@ -1,0 +1,122 @@
+{
+ "ATL": {
+  "name": "Quin Snyder",
+  "experience": 12
+ },
+ "BOS": {
+  "name": "Joe Mazzulla",
+  "experience": 4
+ },
+ "BKN": {
+  "name": "Jordi Fernandez",
+  "experience": 2
+ },
+ "CHA": {
+  "name": "Charles Lee",
+  "experience": 2
+ },
+ "CHI": {
+  "name": "Tiago Splitter",
+  "experience": 1
+ },
+ "CLE": {
+  "name": "Kenny Atkinson",
+  "experience": 6
+ },
+ "DAL": {
+  "name": "Dusty May",
+  "experience": 0
+ },
+ "DEN": {
+  "name": "David Adelman",
+  "experience": 2
+ },
+ "DET": {
+  "name": "J.B. Bickerstaff",
+  "experience": 10
+ },
+ "GS": {
+  "name": "Steve Kerr",
+  "experience": 12
+ },
+ "HOU": {
+  "name": "Ime Udoka",
+  "experience": 4
+ },
+ "IND": {
+  "name": "Rick Carlisle",
+  "experience": 24
+ },
+ "LAC": {
+  "name": "Tyronn Lue",
+  "experience": 10
+ },
+ "LAL": {
+  "name": "JJ Redick",
+  "experience": 2
+ },
+ "MEM": {
+  "name": "Tuomas Iisalo",
+  "experience": 2
+ },
+ "MIA": {
+  "name": "Erik Spoelstra",
+  "experience": 18
+ },
+ "MIL": {
+  "name": "Taylor Jenkins",
+  "experience": 6
+ },
+ "MIN": {
+  "name": "Chris Finch",
+  "experience": 6
+ },
+ "NO": {
+  "name": "Jamahl Mosley",
+  "experience": 5
+ },
+ "NY": {
+  "name": "Mike Brown",
+  "experience": 12
+ },
+ "OKC": {
+  "name": "Mark Daigneault",
+  "experience": 6
+ },
+ "ORL": {
+  "name": "Sean Sweeney",
+  "experience": 0
+ },
+ "PHI": {
+  "name": "Nick Nurse",
+  "experience": 8
+ },
+ "PHX": {
+  "name": "Jordan Ott",
+  "experience": 1
+ },
+ "POR": {
+  "name": "Micah Nori",
+  "experience": 0
+ },
+ "SAC": {
+  "name": "Doug Christie",
+  "experience": 2
+ },
+ "SA": {
+  "name": "Mitch Johnson",
+  "experience": 2
+ },
+ "TOR": {
+  "name": "Darko Rajakovic",
+  "experience": 3
+ },
+ "UTAH": {
+  "name": "Will Hardy",
+  "experience": 4
+ },
+ "WSH": {
+  "name": "Brian Keefe",
+  "experience": 3
+ }
+}

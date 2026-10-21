@@ -15,6 +15,8 @@ resolved to five a side are dropped, never guessed.
 """
 from __future__ import annotations
 
+import math
+import re
 from dataclasses import dataclass
 from typing import Any
 
@@ -42,6 +44,64 @@ class Stint:
         h = self.home_fga - self.home_oreb + self.home_tov + 0.44 * self.home_fta
         a = self.away_fga - self.away_oreb + self.away_tov + 0.44 * self.away_fta
         return max(0.0, 0.5 * (h + a))
+
+
+@dataclass
+class Shot:
+    """One field-goal attempt with the ten players on the floor when it went up."""
+    event_id: str
+    side: str                  # home | away (the shooting side)
+    shooter: str
+    assister: str
+    zone: str                  # rim | paint | mid | corner3 | above3 | heave
+    kind: str                  # see shot_kind()
+    value: int                 # 2 or 3
+    made: int
+    distance: float
+    x: float
+    y: float
+    transition: int            # within TRANSITION_SECONDS of winning the ball
+    offense: tuple[str, ...]
+    defense: tuple[str, ...]
+
+
+TRANSITION_SECONDS = 8.0
+DISTANCE = re.compile(r"(\d+)-foot")
+
+
+def shot_zone(value: int, distance: float, x: float, y: float) -> str:
+    """The league's zones from ESPN coordinates (x 0-50 across, y feet from the basket line)."""
+    if distance >= 40:
+        return "heave"
+    if value == 3:
+        return "corner3" if y <= 8 else "above3"
+    if distance <= 4:
+        return "rim"
+    if abs(x - 25) <= 8 and y <= 14:
+        return "paint"
+    return "mid"
+
+
+def shot_kind(type_text: str, assisted: bool, value: int, distance: float) -> str:
+    """ESPN credits assists only on makes, so assisted jumpers are not a kind of their own."""
+    t = type_text.lower()
+    if "putback" in t or t.startswith("tip"):
+        return "putback"
+    if "cutting" in t or "alley" in t:
+        return "cut"
+    if "hook" in t or "turnaround" in t or "post" in t:
+        return "post"
+    if "float" in t:
+        return "floater"
+    if "step back" in t or "stepback" in t:
+        return "stepback"
+    if "pullup" in t or "pull-up" in t or "pull up" in t:
+        return "pullup"
+    if "driving" in t or "running" in t and ("layup" in t or "dunk" in t or "finger" in t):
+        return "drive"
+    if "dunk" in t or "layup" in t or "finger roll" in t:
+        return "rim_finish"
+    return "jumper"
 
 
 def _clock_seconds(play: dict[str, Any]) -> float:
@@ -77,12 +137,16 @@ def _kind(play: dict[str, Any]) -> str:
 
 
 def parse(event_id: str, data: dict[str, Any]) -> list[Stint]:
+    return parse_all(event_id, data)[0]
+
+
+def parse_all(event_id: str, data: dict[str, Any]) -> tuple[list[Stint], list[Shot]]:
     comp = ((data.get("header") or {}).get("competitions") or [{}])[0]
     side_of: dict[str, str] = {}
     for c in comp.get("competitors", []):
         side_of[str(c.get("id") or (c.get("team") or {}).get("id"))] = c.get("homeAway")
     if set(side_of.values()) != {"home", "away"}:
-        return []
+        return [], []
     starters: dict[str, set[str]] = {"home": set(), "away": set()}
     roster: dict[str, str] = {}
     for block in (data.get("boxscore") or {}).get("players", []):
@@ -99,7 +163,7 @@ def parse(event_id: str, data: dict[str, Any]) -> list[Stint]:
                     starters[side].add(pid)
     plays = sorted(data.get("plays") or [], key=lambda p: int(p.get("sequenceNumber") or 0))
     if not plays or len(starters["home"]) != 5 or len(starters["away"]) != 5:
-        return []
+        return [], []
 
     by_period: dict[int, list[dict[str, Any]]] = {}
     for p in plays:
@@ -129,6 +193,8 @@ def parse(event_id: str, data: dict[str, Any]) -> list[Stint]:
         return on
 
     out: list[Stint] = []
+    shots: list[Shot] = []
+    won_ball: dict[str, float] = {"home": -1e9, "away": -1e9}
     prev = {k: set(v) for k, v in starters.items()}
     score = {"home": 0, "away": 0}
     for period in sorted(by_period):
@@ -183,8 +249,35 @@ def parse(event_id: str, data: dict[str, Any]) -> list[Stint]:
             # offensive rebounds and would inflate possessions.
             if kind in ("oreb", "dreb") and not p.get("participants"):
                 continue
+            if kind == "dreb":
+                won_ball[side] = t
+            elif kind == "tov":
+                won_ball["away" if side == "home" else "home"] = t
             if kind == "fga":
                 acc[f"{side}_fga"] += 1
+                parts = [str((x.get("athlete") or {}).get("id") or "") for x in p.get("participants") or []]
+                text = str(p.get("text") or "")
+                value = 3 if int(p.get("pointsAttempted") or 0) == 3 or "three point" in text.lower() else 2
+                coord = p.get("coordinate") or {}
+                cx, cy = float(coord.get("x", -1)), float(coord.get("y", -1))
+                m = DISTANCE.search(text)
+                if m:
+                    dist = float(m.group(1))
+                elif 0 <= cx <= 50 and cy >= 0:
+                    dist = math.hypot(cx - 25.0, cy)
+                else:
+                    dist = 0.0 if value == 2 else 24.0
+                if not (0 <= cx <= 50 and 0 <= cy <= 94):
+                    cx, cy = 25.0, max(0.0, dist)
+                assisted = "assist" in text.lower() and len(parts) > 1
+                other = "away" if side == "home" else "home"
+                if len(on[side]) == 5 and len(on[other]) == 5 and parts and parts[0]:
+                    shots.append(Shot(event_id, side, parts[0], parts[1] if assisted else "",
+                                      shot_zone(value, dist, cx, cy),
+                                      shot_kind(str((p.get("type") or {}).get("text") or ""), assisted, value, dist),
+                                      value, 1 if p.get("scoringPlay") else 0, dist, cx, cy,
+                                      1 if t - won_ball[side] <= TRANSITION_SECONDS else 0,
+                                      tuple(sorted(on[side])), tuple(sorted(on[other]))))
             elif kind == "ft":
                 acc[f"{side}_fta"] += 1
             elif kind == "oreb":
@@ -194,4 +287,4 @@ def parse(event_id: str, data: dict[str, Any]) -> list[Stint]:
         end = t_start + (720 if period <= 4 else 300)
         flush(max(end, last_t))
         prev = {k: set(v) for k, v in on.items()}
-    return out
+    return out, shots
