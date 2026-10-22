@@ -122,7 +122,7 @@ def philosophy(coach_name: str, history: list[dict[str, Any]], pct_cache: dict[i
     seasons = [h for h in history if FIRST <= h["season"] <= LAST and h["games"] >= MIN_GAMES]
     if not seasons:
         return {"seasons": 0, "summary": f"{coach_name} has no completed NBA head-coaching season (41+ games) "
-                                          f"since 2018-19, so his teams have no fingerprint yet.",
+                                          f"since 2018-19, so there is no fingerprint to read yet.",
                 "metrics": [], "tags": []}
     metrics = []
     for key, _table, _cols, label, high, low in METRICS:
