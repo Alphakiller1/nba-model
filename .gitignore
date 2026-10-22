@@ -7,3 +7,4 @@ _smoke/
 .pytest_cache/
 .ruff_cache/
 data/nbastats/refresh.log
+data/nbastats/task.log
