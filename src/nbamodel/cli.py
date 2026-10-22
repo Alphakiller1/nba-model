@@ -11,7 +11,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import authority, bulk, export, ingest, ledger, nbastats, site
+from . import authority, bbref, bulk, export, ingest, ledger, nbastats, site
 
 
 def _refresh(args: argparse.Namespace) -> int:
@@ -22,6 +22,16 @@ def _refresh(args: argparse.Namespace) -> int:
         if not ingest.load_games(s) or not bulk.load_stints(s):
             bulk.run(s, workers=args.workers)
     bulk.run(season, workers=args.workers)
+    # Basketball-Reference's current-season coaching and team pages (tenure,
+    # mid-season changes, team shot distribution) - refreshed once a day.
+    pages = ((bbref.fetch_coaches, bbref.coach_path(season)), (bbref.fetch_team_seasons, bbref.team_path(season)))
+    for fetch, path in pages:
+        stale_bb = not path.exists() or (datetime.now(timezone.utc).timestamp() - path.stat().st_mtime) > 20 * 3600
+        if stale_bb:
+            try:
+                fetch(season, force=True)
+            except Exception as exc:  # last snapshot stands
+                print(f"bbref {season} {fetch.__name__}: {type(exc).__name__}: {exc}")
     # stats.nba.com (play types, tracking, defender dashboard, shot locations,
     # bio, staff) moves daily at most; it is refreshed every six hours, and a
     # refused pull leaves the last snapshot in place.

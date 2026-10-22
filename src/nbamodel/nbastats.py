@@ -121,6 +121,13 @@ def roster(season: int, team_id: str) -> list[dict]:
     return get("commonteamroster", {"LeagueID": "00", "Season": season_label(season), "TeamID": team_id})
 
 
+def matchups(season: int, def_team_id: str) -> list[dict]:
+    """Each defender's partial possessions split by the opponent's position (G/F/C)."""
+    return get("matchupsrollup", {"LeagueID": "00", "PerMode": "Totals", "Season": season_label(season),
+                                  "SeasonType": "Regular Season", "DefPlayerID": "", "DefTeamID": def_team_id,
+                                  "OffPlayerID": "", "OffTeamID": ""}, timeout=90.0)
+
+
 def teams(season: int) -> list[dict]:
     return get("leaguedashteamstats", {**_common(season), "MeasureType": "Base", "LastNGames": 0, "Month": 0,
                                        "OpponentTeamID": 0, "PORound": 0, "Period": 0, "TeamID": 0,
@@ -197,6 +204,18 @@ def refresh(season: int, log=print, pause: float = 0.6) -> dict[str, int]:
                 log(f"nbastats {season}: three refusals in a row; stopping")
                 return got
         time.sleep(pause)
+    try:
+        team_rows = teams(season) if "teams" not in got else load(season, "teams")[0]
+        rolled = []
+        for t in team_rows:
+            for r in matchups(season, str(t["TEAM_ID"])):
+                rolled.append({**r, "DEF_TEAM_ID": t["TEAM_ID"]})
+            time.sleep(pause)
+        if rolled:
+            save(season, "matchups", rolled)
+            got["matchups"] = len(rolled)
+    except Blocked as exc:
+        log(f"  nbastats {season} matchups: {exc}")
     try:
         team_rows = teams(season) if "teams" not in got else load(season, "teams")[0]
         coaches = []

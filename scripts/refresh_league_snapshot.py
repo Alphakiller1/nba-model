@@ -22,7 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from nbamodel import export, nbastats  # noqa: E402
+from nbamodel import bbref, export, nbastats  # noqa: E402
 
 LOG = ROOT / "data" / "nbastats" / "refresh.log"
 
@@ -49,7 +49,12 @@ def main() -> int:
     if not got:
         log("nothing refreshed (stats.nba.com unreachable); snapshot unchanged")
         return 0
-    git("add", "--", f"data/nbastats/{season}")
+    for fetch in (bbref.fetch_coaches, bbref.fetch_team_seasons):
+        try:
+            fetch(season, force=True)
+        except Exception as exc:
+            log(f"bbref {fetch.__name__}: {type(exc).__name__}: {exc}")
+    git("add", "--", f"data/nbastats/{season}", f"data/bbref/coaches_{season}.json", f"data/bbref/teams_{season}.json")
     if git("diff", "--cached", "--quiet").returncode == 0:
         log("snapshot already current")
         return 0
