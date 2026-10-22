@@ -107,3 +107,25 @@ def test_espn_zone_profiles_rank_thirty_clubs_and_split_defense_on_off():
     row = next(iter(d.values()))[0]
     assert row["attempts_on"] >= 60 and row["attempts_off"] >= 60
     assert abs(row["diff"] - (row["fg_on"] - row["fg_off"])) < 1e-3
+
+
+def test_coach_tenure_and_philosophy_come_from_season_pages():
+    from nbamodel import coaches
+    c = coaches.profile_all(2027)
+    assert c["MIL"]["head_coach"] == "Taylor Jenkins" and c["MIL"]["first_season_with_club"] is True
+    assert c["MIA"]["season_with_club"] >= 19 and c["MIA"]["first_season_with_club"] is False
+    phil = c["MIA"]["philosophy"]
+    assert phil["seasons"] >= 6 and phil["summary"].startswith("Spoelstra's teams")
+    assert all(0 <= m["percentile"] <= 100 for m in phil["metrics"])
+    assert c["ORL"]["philosophy"]["seasons"] == 0  # a first-time head coach has no fingerprint
+
+
+def test_scheme_reads_carry_evidence_and_skip_zone():
+    from nbamodel import schemes
+    r = schemes.reads(2026)
+    assert len(r) == 30
+    for team, v in r.items():
+        assert "zone" not in " ".join(x["scheme"].lower() for x in v["reads"])
+        for read in v["reads"]:
+            assert read["strength"] in ("strong", "clear") and read["evidence"]
+    assert r["MIL"]["measured_under"]  # the coach the scheme was measured under is named

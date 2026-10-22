@@ -502,6 +502,23 @@ def build_all(season: int, form: dict[str, dict], rotations: dict[str, list[dict
     sz = size(t, rotations)
     ec = espn_coaches or ({}, {})
     co = coaches(Tables(season), t if t.season != season else t_prev, ec[0], ec[1])
+    # Tenure, career and philosophy from Basketball-Reference's season coaching
+    # pages (coach_profiles.py) take precedence: it is the only source that
+    # answers a past season with that season's coach.
+    from . import coaches as coach_profiles
+    from . import schemes
+    try:
+        bb = coach_profiles.profile_all(season)
+    except Exception:  # the ESPN/league staff read stands
+        bb = {}
+    for team, info in bb.items():
+        co[team] = {**(co.get(team) or {}), **info,
+                    "head_coach_seasons": info.get("seasons_as_head_coach") or (co.get(team) or {}).get(
+                        "head_coach_seasons")}
+    try:
+        scheme_reads = schemes.reads(t.season)
+    except Exception:
+        scheme_reads = {}
     reg_season = season if ingest.load_games(season) and max(
         (r.get("games", 0) for r in regression(ingest.load_games(season)).values()), default=0) >= MIN_GAMES \
         else season - 1
@@ -525,6 +542,7 @@ def build_all(season: int, form: dict[str, dict], rotations: dict[str, list[dict
             "shot_profile": shots.get(team), "shot_kinds": kinds.get(team), "play_types": pts.get(team),
             "tracking": trk.get(team), "size": sz.get(team), "coach": co.get(team),
             "style": style(team, shots, pts, kinds, form),
+            "defense_scheme": scheme_reads.get(team),
             "regression": reg.get(team), "regression_basis": season_label(reg_season),
             "players": player_profiles(t, rotations.get(team, [])[:9], c3, curve, injuries.get(team, {})),
             "zones_basis": season_label(zone_season) + " · ESPN Play-By-Play" if espn_zones else None,
