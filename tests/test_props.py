@@ -69,3 +69,9 @@ def test_backfill_falls_back_to_another_provider_and_notes_a_miss(monkeypatch):
     monkeypatch.setattr(live.espn, "summary", lambda eid: {"pickcenter": []})
     live.backfill_books([g], notes)
     assert g.book == {} and "C@D" in notes[0]
+
+
+def test_draftkings_matches_either_spelling():
+    assert live._is_draftkings({"provider": {"name": "Draft Kings"}})
+    assert live._is_draftkings({"provider": {"name": "DraftKings"}})
+    assert not live._is_draftkings({"provider": {"name": "ESPN BET"}})

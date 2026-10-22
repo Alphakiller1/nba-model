@@ -121,7 +121,8 @@ def _team_box(team: dict[str, Any]) -> dict[str, int]:
 
 def _dk(pick: list[dict[str, Any]]) -> dict[str, str]:
     for quote in pick or []:
-        if str((quote.get("provider") or {}).get("name", "")).lower() != "draftkings":
+        # ESPN spells it "Draft Kings" to some callers (GitHub's runners).
+        if str((quote.get("provider") or {}).get("name", "")).lower().replace(" ", "") != "draftkings":
             continue
         def s(v: Any) -> str:
             return "" if v is None else str(v)

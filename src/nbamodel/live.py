@@ -65,6 +65,12 @@ def _num(v: Any) -> float | None:
         return None
 
 
+def _is_draftkings(quote: dict[str, Any]) -> bool:
+    """ESPN spells it "DraftKings" to some callers and "Draft Kings" to others (GitHub's runners)."""
+    name = str((quote.get("provider") or {}).get("name", ""))
+    return name.lower().replace(" ", "") == "draftkings"
+
+
 def parse_scoreboard(data: dict[str, Any]) -> list[Fixture]:
     out: list[Fixture] = []
     for ev in data.get("events", []):
@@ -79,7 +85,7 @@ def parse_scoreboard(data: dict[str, Any]) -> list[Fixture]:
         state = _state(comp.get("status") or ev.get("status"))
         book: dict[str, Any] = {}
         for quote in comp.get("odds") or []:
-            if str((quote.get("provider") or {}).get("name", "")).lower() != "draftkings":
+            if not _is_draftkings(quote):
                 continue
             spread = _num(quote.get("spread"))
             book = {"key": "draftkings", "name": "DraftKings", "source": "ESPN scoreboard",
@@ -150,14 +156,14 @@ def backfill_books(fixtures: list[Fixture], issues: list[str] | None = None) -> 
         def provider(q):
             return str((q.get("provider") or {}).get("name", ""))
         priced = [q for q in picks if q.get("overUnder") is not None or q.get("spread") is not None]
-        quote = next((q for q in priced if provider(q).lower() == "draftkings"), priced[0] if priced else None)
+        quote = next((q for q in priced if _is_draftkings(q)), priced[0] if priced else None)
         if quote is None:
             if issues is not None:
                 issues.append(f"pregame line {f.away}@{f.home}: no priced pickcenter "
                               f"(providers: {[provider(q) for q in picks]})")
             continue
         spread = _num(quote.get("spread"))
-        name = provider(quote) or "Sportsbook"
+        name = "DraftKings" if _is_draftkings(quote) else (provider(quote) or "Sportsbook")
         f.book = {"key": name.lower().replace(" ", ""), "name": name, "source": "ESPN game summary (pregame line)",
                   "spread": spread, "margin": None if spread is None else -spread,
                   "total": _num(quote.get("overUnder")),

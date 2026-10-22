@@ -51,9 +51,9 @@ jobs:
             data/shots
             data/nbastats
             data/coaches
-          key: nba-games-${{ runner.os }}-${{ github.run_id }}
+          key: nba-games-v2-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
-            nba-games-${{ runner.os }}-
+            nba-games-v2-${{ runner.os }}-
 
       - name: Build the board
         env:
@@ -92,7 +92,7 @@ jobs:
             data/shots
             data/nbastats
             data/coaches
-          key: nba-games-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: nba-games-v2-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
