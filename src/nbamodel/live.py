@@ -129,8 +129,33 @@ def slate(now: datetime | None = None, *, horizon_days: int = 4) -> tuple[str, l
         if not fixtures:
             continue
         if any(f.state != "final" for f in fixtures):
-            return d.isoformat(), fixtures
+            return d.isoformat(), backfill_books(fixtures)
     return day.isoformat(), []
+
+
+def backfill_books(fixtures: list[Fixture]) -> list[Fixture]:
+    """ESPN's scoreboard drops the odds once a game tips; its game summary keeps
+    the pregame DraftKings line (pickcenter). A live or final game without a
+    scoreboard quote takes that one, marked with its source."""
+    for f in fixtures:
+        if f.book or f.state == "scheduled":
+            continue
+        try:
+            picks = espn.summary(f.event_id).get("pickcenter") or []
+        except Exception:  # the game stays on the board without a line
+            continue
+        for quote in picks:
+            if str((quote.get("provider") or {}).get("name", "")).lower() != "draftkings":
+                continue
+            spread = _num(quote.get("spread"))
+            f.book = {"key": "draftkings", "name": "DraftKings", "source": "ESPN game summary (pregame line)",
+                      "spread": spread, "margin": None if spread is None else -spread,
+                      "total": _num(quote.get("overUnder")),
+                      "home_moneyline": _num((quote.get("homeTeamOdds") or {}).get("moneyLine")),
+                      "away_moneyline": _num((quote.get("awayTeamOdds") or {}).get("moneyLine")),
+                      "details": quote.get("details")}
+            break
+    return fixtures
 
 
 @dataclass

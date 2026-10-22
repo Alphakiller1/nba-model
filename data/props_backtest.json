@@ -1,0 +1,63 @@
+{
+ "dispersion_fit_2024_25": {
+  "points": 2.346,
+  "rebounds": 1.127,
+  "assists": 1.13,
+  "threes": 1.08
+ },
+ "test_2025_26": {
+  "points": {
+   "n": 6528,
+   "mae_model": 4.636,
+   "mae_season_avg": 4.687,
+   "mae_last10": 4.687,
+   "p10_p90_coverage": 0.798
+  },
+  "rebounds": {
+   "n": 6528,
+   "mae_model": 1.901,
+   "mae_season_avg": 1.921,
+   "mae_last10": 1.931,
+   "p10_p90_coverage": 0.872
+  },
+  "assists": {
+   "n": 6528,
+   "mae_model": 1.36,
+   "mae_season_avg": 1.37,
+   "mae_last10": 1.378,
+   "p10_p90_coverage": 0.9
+  },
+  "threes": {
+   "n": 6528,
+   "mae_model": 0.895,
+   "mae_season_avg": 0.891,
+   "mae_last10": 0.9,
+   "p10_p90_coverage": 0.929,
+   "brier_over_model_line": 0.2129
+  },
+  "pra": {
+   "n": 6528,
+   "mae_model": 6.14,
+   "mae_season_avg": 6.256,
+   "mae_last10": 6.175,
+   "p10_p90_coverage": 0.774
+  }
+ },
+ "over_at_model_line_2025_26": {
+  "points": {
+   "n": 3277,
+   "brier": 0.247,
+   "over_hit_rate": 0.45
+  },
+  "rebounds": {
+   "n": 3277,
+   "brier": 0.2461,
+   "over_hit_rate": 0.453
+  },
+  "assists": {
+   "n": 3277,
+   "brier": 0.2439,
+   "over_hit_rate": 0.44
+  }
+ }
+}

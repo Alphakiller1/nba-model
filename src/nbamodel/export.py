@@ -14,7 +14,19 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import authority, availability, context, features, ingest, live, player_board, profiles, signals, teams
+from . import (
+    authority,
+    availability,
+    context,
+    features,
+    ingest,
+    live,
+    player_board,
+    player_props,
+    profiles,
+    signals,
+    teams,
+)
 from .backtest import season_end
 from .ratings import ABBRS, CONSTANTS, PARAMS, Ratings, fit, local_day, prior_from, project, rest_flags
 
@@ -262,6 +274,20 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
                 for i in injury_rows if i.team == team]
         public_games.append(public)
 
+    # Player props from tonight's rotations (player_props.py); the game board
+    # still ships if this layer fails.
+    props: list[dict[str, Any]] = []
+    try:
+        book = player_props.RateBook(season)
+        statuses = {pid: s for people in inj_map.values() for pid, s in people.items()}
+        for g in board_games:
+            if g.get("rotation"):
+                props.extend(player_props.project_game(book, g, statuses))
+    except Exception as exc:
+        issues.append(f"player props unavailable: {type(exc).__name__}: {exc}")
+    props_record_path = authority.DATA / "props_backtest.json"
+    props_record = json.loads(props_record_path.read_text(encoding="utf-8")) if props_record_path.exists() else None
+
     generated = now.replace(microsecond=0).isoformat()
     record = authority.record()
     board = {
@@ -279,6 +305,14 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
                    "roster_shift": round(shift.get(a, 0.0), 2), "games": rating.games.get(a, 0)}
                   for a in sorted(ABBRS, key=lambda a: -rating.net(a))],
         "games": board_games, "backtest": record, "signals_record": sig_record,
+        "player_projections": props, "player_projections_record": props_record,
+        "player_projections_note": ("Points, rebounds, assists, threes and PRA for every rotation player: "
+                                    "per-minute rates (recency-weighted, shrunk to position) x the board's "
+                                    "expected minutes x tonight's pace, points tied to the club's projected "
+                                    "score, spread simulated. Walk-forward 2025-26: lower error than season "
+                                    "and last-10 averages on points, rebounds, assists and PRA; level on threes. "
+                                    "No sportsbook prop lines are compared; the over % is against the model's "
+                                    "own line."),
         "signal_note": ("A signal is a gap between the player model and the CURRENT DraftKings line. Its record "
                         "was measured against the consensus OPENING line, 2023-24 to 2025-26; the model does not "
                         "beat the closing line, so a signal read after the line has moved is worth less."),
