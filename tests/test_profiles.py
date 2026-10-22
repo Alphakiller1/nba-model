@@ -129,3 +129,17 @@ def test_scheme_reads_carry_evidence_and_skip_zone():
         for read in v["reads"]:
             assert read["strength"] in ("strong", "clear") and read["evidence"]
     assert r["MIL"]["measured_under"]  # the coach the scheme was measured under is named
+
+
+def test_generated_coach_and_scheme_copy_is_gender_neutral():
+    """Coach summaries and scheme notes are published as written: no he/his/him/she/her."""
+    import re
+
+    from nbamodel import coaches, schemes
+    pronoun = re.compile(r"\b(he|his|him|she|her|hers)\b", re.I)
+    for team, c in coaches.profile_all(2027).items():
+        assert not pronoun.search(c["philosophy"]["summary"]), (team, c["philosophy"]["summary"])
+    for team, s in schemes.reads(2026).items():
+        for r in s["reads"]:
+            assert not pronoun.search(r["note"]), (team, r["note"])
+        assert not pronoun.search(s["not_measured"])
