@@ -54,3 +54,18 @@ def test_backfill_takes_the_summary_line_after_tip(monkeypatch):
     s.event_id, s.state, s.book = "10", "scheduled", {}
     live.backfill_books([s])
     assert s.book == {}
+
+
+def test_backfill_falls_back_to_another_provider_and_notes_a_miss(monkeypatch):
+    f = live.Fixture.__new__(live.Fixture)
+    f.event_id, f.state, f.book, f.away, f.home = "9", "live", {}, "A", "B"
+    monkeypatch.setattr(live.espn, "summary", lambda eid: {"pickcenter": [
+        {"provider": {"name": "ESPN BET"}, "spread": 3.0, "overUnder": 221.0}]})
+    notes: list[str] = []
+    live.backfill_books([f], notes)
+    assert f.book["name"] == "ESPN BET" and f.book["margin"] == -3.0 and not notes
+    g = live.Fixture.__new__(live.Fixture)
+    g.event_id, g.state, g.book, g.away, g.home = "11", "final", {}, "C", "D"
+    monkeypatch.setattr(live.espn, "summary", lambda eid: {"pickcenter": []})
+    live.backfill_books([g], notes)
+    assert g.book == {} and "C@D" in notes[0]

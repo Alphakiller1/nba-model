@@ -115,6 +115,8 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
     season = current_season(now)
     issues: list[str] = []
     slate_date, fixtures = live.slate(now)
+    notes: list[str] = []  # informational; unlike issues, they do not mark the build degraded
+    live.backfill_books(fixtures, notes)
     try:
         injury_rows = live.injuries()
     except Exception as exc:  # the board still ships; availability is then unknown
@@ -327,7 +329,8 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
         raise ValueError(f"public slate carries model fields: {sorted(leaked)}")
     build_info = {"generated_at_utc": generated, "state": "ok" if not issues else "degraded", "issues": issues,
                   "season": season, "slate_date": slate_date, "games": len(fixtures),
-                  "cached_games": len(games), "injuries": len(injury_rows), "model_version": MODEL_VERSION}
+                  "cached_games": len(games), "injuries": len(injury_rows), "model_version": MODEL_VERSION,
+                  "notes": notes}
     out.mkdir(parents=True, exist_ok=True)
     for name, payload in (("board.json", board), ("slate.json", public_slate), ("build.json", build_info)):
         (out / name).write_text(json.dumps(payload, indent=1, default=str) + "\n", encoding="utf-8")

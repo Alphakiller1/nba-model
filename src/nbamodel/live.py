@@ -129,32 +129,41 @@ def slate(now: datetime | None = None, *, horizon_days: int = 4) -> tuple[str, l
         if not fixtures:
             continue
         if any(f.state != "final" for f in fixtures):
-            return d.isoformat(), backfill_books(fixtures)
+            return d.isoformat(), fixtures
     return day.isoformat(), []
 
 
-def backfill_books(fixtures: list[Fixture]) -> list[Fixture]:
+def backfill_books(fixtures: list[Fixture], issues: list[str] | None = None) -> list[Fixture]:
     """ESPN's scoreboard drops the odds once a game tips; its game summary keeps
-    the pregame DraftKings line (pickcenter). A live or final game without a
-    scoreboard quote takes that one, marked with its source."""
+    the pregame line (pickcenter). A live or final game without a scoreboard
+    quote takes DraftKings' from there, else the first provider ESPN lists,
+    named. A game still without a line is noted in `issues`."""
     for f in fixtures:
         if f.book or f.state == "scheduled":
             continue
         try:
             picks = espn.summary(f.event_id).get("pickcenter") or []
-        except Exception:  # the game stays on the board without a line
+        except Exception as exc:  # the game stays on the board without a line
+            if issues is not None:
+                issues.append(f"pregame line {f.away}@{f.home}: summary failed ({type(exc).__name__})")
             continue
-        for quote in picks:
-            if str((quote.get("provider") or {}).get("name", "")).lower() != "draftkings":
-                continue
-            spread = _num(quote.get("spread"))
-            f.book = {"key": "draftkings", "name": "DraftKings", "source": "ESPN game summary (pregame line)",
-                      "spread": spread, "margin": None if spread is None else -spread,
-                      "total": _num(quote.get("overUnder")),
-                      "home_moneyline": _num((quote.get("homeTeamOdds") or {}).get("moneyLine")),
-                      "away_moneyline": _num((quote.get("awayTeamOdds") or {}).get("moneyLine")),
-                      "details": quote.get("details")}
-            break
+        def provider(q):
+            return str((q.get("provider") or {}).get("name", ""))
+        priced = [q for q in picks if q.get("overUnder") is not None or q.get("spread") is not None]
+        quote = next((q for q in priced if provider(q).lower() == "draftkings"), priced[0] if priced else None)
+        if quote is None:
+            if issues is not None:
+                issues.append(f"pregame line {f.away}@{f.home}: no priced pickcenter "
+                              f"(providers: {[provider(q) for q in picks]})")
+            continue
+        spread = _num(quote.get("spread"))
+        name = provider(quote) or "Sportsbook"
+        f.book = {"key": name.lower().replace(" ", ""), "name": name, "source": "ESPN game summary (pregame line)",
+                  "spread": spread, "margin": None if spread is None else -spread,
+                  "total": _num(quote.get("overUnder")),
+                  "home_moneyline": _num((quote.get("homeTeamOdds") or {}).get("moneyLine")),
+                  "away_moneyline": _num((quote.get("awayTeamOdds") or {}).get("moneyLine")),
+                  "details": quote.get("details")}
     return fixtures
 
 
