@@ -508,6 +508,15 @@ def build_all(season: int, form: dict[str, dict], rotations: dict[str, list[dict
     reg = regression(ingest.load_games(reg_season))
     curve = aging.curve()
     c3 = career_threes(t.season)  # seasons before the one the rotation's 3P% is read on
+    # Shot zones and on-floor defense come from ESPN play-by-play, which every
+    # build refreshes: this season's once clubs have played MIN_GAMES, else
+    # last season's. stats.nba.com zones stand in only when ESPN has none.
+    zone_season = season if espn_games_played(season) >= MIN_GAMES else season - 1
+    espn_zones = espn_team_zones(zone_season)
+    espn_pzones = espn_player_zones(zone_season)
+    onfloor = espn_onfloor_defense(zone_season)
+    if espn_zones:
+        shots = espn_zones
     out = {}
     for team in teams.all_abbrs():
         out[team] = {
@@ -518,10 +527,131 @@ def build_all(season: int, form: dict[str, dict], rotations: dict[str, list[dict
             "style": style(team, shots, pts, kinds, form),
             "regression": reg.get(team), "regression_basis": season_label(reg_season),
             "players": player_profiles(t, rotations.get(team, [])[:9], c3, curve, injuries.get(team, {})),
+            "zones_basis": season_label(zone_season) + " · ESPN Play-By-Play" if espn_zones else None,
         }
+        for prof in out[team]["players"]:
+            pid = prof.get("player_id") or ""
+            if espn_pzones.get(pid):
+                prof["zones"] = espn_pzones[pid]
+            prof["defense_onfloor"] = onfloor.get(pid, [])
     prov = {"stats_nba_season": season_label(t.season), "stats_nba_as_of": t.as_of(),
             "aging_curve": [{"age": a, "offense": curve.off[a], "defense": curve.deff[a]} for a in sorted(curve.off)],
             "sources": ["stats.nba.com (Synergy play types, Second Spectrum tracking, defender dashboard, "
                         "shot locations, bio, coaches)", "ESPN play-by-play (shot kinds, transition)",
                         "Basketball-Reference (aging curve)"]}
     return out, prov
+
+
+# -- ESPN play-by-play zones (the automated path: no stats.nba.com needed) -------
+
+ESPN_ZONES = (("rim", "At The Rim"), ("paint", "Paint (Non-RA)"), ("mid", "Mid-Range"),
+              ("corner3", "Corner Three"), ("above3", "Above-The-Break Three"))
+DEF_GROUPS = (("rim", ("rim",), "At The Rim"), ("paint", ("paint",), "Paint"), ("mid", ("mid",), "Mid-Range"),
+              ("three", ("corner3", "above3"), "Three-Pointers"))
+
+
+def _shots_by_team(season: int):
+    games = {g.event_id: g for g in ingest.load_games(season)}
+    for r in bulk.load_shots(season):
+        g = games.get(r["event_id"])
+        if not g or r["zone"] == "heave":
+            continue
+        off = g.home if r["side"] == "home" else g.away
+        dfn = g.away if r["side"] == "home" else g.home
+        yield off, dfn, r
+
+
+def espn_team_zones(season: int) -> dict[str, dict]:
+    """Team shot profile (own and allowed) from ESPN shots, in shot_profile()'s shape."""
+    tally: dict[str, dict[str, dict[str, list[int]]]] = defaultdict(
+        lambda: {"offense": defaultdict(lambda: [0, 0]), "defense": defaultdict(lambda: [0, 0])})
+    for off, dfn, r in _shots_by_team(season):
+        made = int(r["made"])
+        for team, side in ((off, "offense"), (dfn, "defense")):
+            t = tally[team][side][r["zone"]]
+            t[0] += 1
+            t[1] += made
+    out: dict[str, dict] = defaultdict(dict)
+    for side in ("offense", "defense"):
+        for key, label in ESPN_ZONES:
+            share, pct = {}, {}
+            for team, sides in tally.items():
+                total = sum(v[0] for v in sides[side].values())
+                att, made = sides[side][key]
+                share[team] = att / total if total else None
+                pct[team] = made / att if att >= 20 else None
+            who = "" if side == "offense" else " Allowed"
+            s_r = ranked(share, f"{label} Share Of Shots{who}", "neutral", "pct")
+            p_r = ranked(pct, f"{label} FG%{who}", "high" if side == "offense" else "low", "pct")
+            for team in tally:
+                out[team].setdefault(side, {})[key] = {"label": label, "share": s_r.get(team), "fg": p_r.get(team)}
+    return dict(out)
+
+
+def espn_player_zones(season: int) -> dict[str, list[dict]]:
+    """ESPN athlete id -> zones like player_profiles()' (share, FG%, attempts per game)."""
+    tally: dict[str, dict[str, list[int]]] = defaultdict(lambda: defaultdict(lambda: [0, 0]))
+    games: dict[str, set] = defaultdict(set)
+    for _, _, r in _shots_by_team(season):
+        t = tally[r["shooter"]][r["zone"]]
+        t[0] += 1
+        t[1] += int(r["made"])
+        games[r["shooter"]].add(r["event_id"])
+    out = {}
+    for pid, z in tally.items():
+        total = sum(v[0] for v in z.values())
+        n = len(games[pid]) or 1
+        out[pid] = [{"zone": key, "label": label, "fga": round(z[key][0] / n, 2),
+                     "share": round(z[key][0] / total, 4) if total else None,
+                     "fg": round(z[key][1] / z[key][0], 4) if z[key][0] else None}
+                    for key, label in ESPN_ZONES if z[key][0]]
+    return out
+
+
+def espn_onfloor_defense(season: int, min_att: int = 60) -> dict[str, list[dict]]:
+    """ESPN athlete id -> opponents' FG% by zone with him on the floor against with him off it.
+
+    On/off is noisy and shares credit with four teammates; it is shown as
+    what it is, with the attempts behind each figure, and only above
+    ``min_att`` attempts on each side of the split.
+    """
+    team_zone: dict[str, dict[str, list[int]]] = defaultdict(lambda: defaultdict(lambda: [0, 0]))
+    on: dict[tuple[str, str], dict[str, list[int]]] = defaultdict(lambda: defaultdict(lambda: [0, 0]))
+    group_of = {z: g for g, zones, _ in DEF_GROUPS for z in zones}
+    for _, dfn, r in _shots_by_team(season):
+        grp = group_of.get(r["zone"])
+        if not grp:
+            continue
+        made = int(r["made"])
+        t = team_zone[dfn][grp]
+        t[0] += 1
+        t[1] += made
+        for pid in r["defense"].split("|"):
+            o = on[(pid, dfn)][grp]
+            o[0] += 1
+            o[1] += made
+    out: dict[str, list[dict]] = {}
+    for (pid, team), zones in on.items():
+        rows = []
+        for grp, _, label in DEF_GROUPS:
+            a_on, m_on = zones[grp]
+            a_all, m_all = team_zone[team][grp]
+            a_off, m_off = a_all - a_on, m_all - m_on
+            if a_on < min_att or a_off < min_att:
+                continue
+            fg_on, fg_off = m_on / a_on, m_off / a_off
+            rows.append({"zone": grp, "label": label, "fg_on": round(fg_on, 4), "fg_off": round(fg_off, 4),
+                         "diff": round(fg_on - fg_off, 4), "attempts_on": a_on, "attempts_off": a_off})
+        # A player traded mid-season keeps the stint he defended most.
+        if rows and sum(r["attempts_on"] for r in rows) > sum(r["attempts_on"] for r in out.get(pid, [])):
+            out[pid] = rows
+    return out
+
+
+def espn_games_played(season: int) -> float:
+    counts: dict[str, int] = defaultdict(int)
+    for g in ingest.load_games(season):
+        counts[g.home] += 1
+        counts[g.away] += 1
+    vals = sorted(counts.values())
+    return vals[len(vals) // 2] if vals else 0.0

@@ -94,3 +94,16 @@ def test_public_slate_profiles_stay_free_of_model_fields():
     prof = {"shot_profile": {"offense": {"rim": {"share": {"value": 0.3, "rank": 3, "of": 30}}}},
             "players": [{"age_change": {"offense": 0.2, "about": "league history"}}]}
     assert export.forbidden_keys({"games": [{"away_profile": prof}]}) == set()
+
+
+def test_espn_zone_profiles_rank_thirty_clubs_and_split_defense_on_off():
+    z = profiles.espn_team_zones(2026)
+    assert len(z) == 30
+    rim = z["OKC"]["offense"]["rim"]
+    assert rim["fg"]["of"] == 30 and 0.5 < rim["fg"]["value"] < 0.8
+    assert z["OKC"]["defense"]["rim"]["fg"]["better"] == "low"
+    d = profiles.espn_onfloor_defense(2026)
+    assert len(d) > 300
+    row = next(iter(d.values()))[0]
+    assert row["attempts_on"] >= 60 and row["attempts_off"] >= 60
+    assert abs(row["diff"] - (row["fg_on"] - row["fg_off"])) < 1e-3
