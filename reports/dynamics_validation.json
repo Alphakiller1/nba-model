@@ -1,0 +1,60 @@
+{
+  "schema": "basketball-trajectory-validation/1",
+  "as_of": "2026-11-07T05:26:25.559680+00:00",
+  "horizon_team_games": 5,
+  "stride": 5,
+  "minimum_training_games": 8,
+  "calibration_cutoff_exclusive": "2026-02-01T00:00:00+00:00",
+  "calibrated_shooting_weight": 1.0,
+  "method": "Date-censored inputs; nonoverlapping five-game targets per team; bounded MSE slope fit on calibration only.",
+  "target": "Future five-game shot-making change versus the last five at last-five volumes; net offense minus allowed.",
+  "limitations": "Retrospective date splits, not source-vintage replay. No shot-quality, injury or future-opponent adjustment. Team targets share opponents. Feature design was refined while reviewing historical results; independent live validation is still required.",
+  "score_forecast_weight": 0.0,
+  "calibration": {
+    "state": "available",
+    "windows": 256,
+    "teams": 30,
+    "shooting_shift_mae_pp100": 6.342532667911874,
+    "no_change_mae_pp100": 7.313275299596635,
+    "prefix_rate_reversion_mae_pp100": 6.660337946375252,
+    "shooting_shift_rmse_pp100": 8.085098731449925,
+    "no_change_rmse_pp100": 9.371589091587799,
+    "team_equal_mae_delta_95pct": [
+      -1.2451996374738827,
+      -0.6921953770576096
+    ],
+    "directional_windows_abs_prediction_ge_0_5": 228,
+    "directional_accuracy": 0.6842105263157895,
+    "pace_windows": 243,
+    "pace_mae": 1.863328638224429,
+    "season_mean_pace_mae": 2.014059220691301,
+    "last5_pace_mae": 2.1482605685277556
+  },
+  "holdout": {
+    "2026": {
+      "state": "available",
+      "windows": 166,
+      "teams": 30,
+      "shooting_shift_mae_pp100": 7.37473437484808,
+      "no_change_mae_pp100": 8.240789957078402,
+      "prefix_rate_reversion_mae_pp100": 6.850798198067517,
+      "shooting_shift_rmse_pp100": 9.18662516776929,
+      "no_change_rmse_pp100": 10.483421106657222,
+      "team_equal_mae_delta_95pct": [
+        -1.2800915250616338,
+        -0.46676004574494756
+      ],
+      "directional_windows_abs_prediction_ge_0_5": 136,
+      "directional_accuracy": 0.6544117647058824,
+      "pace_windows": 160,
+      "pace_mae": 1.9916357070520427,
+      "season_mean_pace_mae": 2.0130179305939158,
+      "last5_pace_mae": 2.7301491541964866
+    },
+    "2027": {
+      "windows": 0,
+      "teams": 0,
+      "state": "insufficient_future_games"
+    }
+  }
+}
