@@ -1,0 +1,42 @@
+{
+  "source": "Databallr public stats API",
+  "season": 2026,
+  "season_label": "2025-26",
+  "retrieved_at_utc": "2026-11-07T03:11:15.533657+00:00",
+  "requested_filters": {
+    "playoffs": false,
+    "leverage": "all"
+  },
+  "competition_policy": "Advanced responses may contain playoff rows; normalized regular-season evidence explicitly filters playoffs=0.",
+  "receipts": [
+    {
+      "url": "https://api.databallr.com/v1/nba/players/stats?year=2026&playoffs=false&limit=500&offset=0",
+      "rows": 499,
+      "sha256": "b1a26ebfd1c6c039de4cbb9c4832a376cdd51eca117c2fb60968430b2b60ba3b",
+      "file": "players-0.json"
+    },
+    {
+      "url": "https://api.databallr.com/v1/nba/players/stats/advanced?year=2026&playoffs=false&limit=500&offset=0",
+      "rows": 500,
+      "sha256": "189aea7ac300154b94aac58e74e780cddb1b77f53bfc17f32d18df5c4c836bcd",
+      "file": "advanced-0.json"
+    },
+    {
+      "url": "https://api.databallr.com/v1/nba/players/stats/advanced?year=2026&playoffs=false&limit=500&offset=500",
+      "rows": 230,
+      "sha256": "e54bf386b49360947566839a8c0e209075517a4ba90240fe09a2435e7d7371cf",
+      "file": "advanced-500.json"
+    },
+    {
+      "url": "https://api.databallr.com/v1/nba/teams/stats?season=2026&leverage=all",
+      "sha256": "8cff157253b2a7c4ca2a9426c9674c3631a963d5026469dc6d7cd657feeb44fa",
+      "team_rows": 30,
+      "opponent_rows": 30,
+      "source_updated_at": {
+        "team": "2026-08-11T17:28:02.185+00:00",
+        "opponent": "2026-08-11T17:28:02.443+00:00"
+      },
+      "file": "teams.json"
+    }
+  ]
+}

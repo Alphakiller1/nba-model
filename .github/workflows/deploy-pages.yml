@@ -50,6 +50,8 @@ jobs:
             data/stints
             data/shots
             data/nbastats
+            data/databallr
+            data/coverage
             data/coaches
           key: nba-games-v2-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
@@ -91,6 +93,8 @@ jobs:
             data/stints
             data/shots
             data/nbastats
+            data/databallr
+            data/coverage
             data/coaches
           key: nba-games-v2-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
 

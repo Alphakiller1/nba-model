@@ -1,0 +1,36 @@
+{
+  "source": "Databallr public stats API",
+  "season": 2027,
+  "season_label": "2026-27",
+  "retrieved_at_utc": "2026-11-07T03:11:14.743285+00:00",
+  "requested_filters": {
+    "playoffs": false,
+    "leverage": "all"
+  },
+  "competition_policy": "Advanced responses may contain playoff rows; normalized regular-season evidence explicitly filters playoffs=0.",
+  "receipts": [
+    {
+      "url": "https://api.databallr.com/v1/nba/players/stats?year=2027&playoffs=false&limit=500&offset=0",
+      "rows": 452,
+      "sha256": "91b09018287ec97271e798cb5e01431cc98ac552a79e962f6665daa6344c7cb0",
+      "file": "players-0.json"
+    },
+    {
+      "url": "https://api.databallr.com/v1/nba/players/stats/advanced?year=2027&playoffs=false&limit=500&offset=0",
+      "rows": 452,
+      "sha256": "17a5c290d46af2dbddd7c1b8e57d37d690ab93aca43d1888c489d940bad0bcc1",
+      "file": "advanced-0.json"
+    },
+    {
+      "url": "https://api.databallr.com/v1/nba/teams/stats?season=2027&leverage=all",
+      "sha256": "971d91cf637dda34dc8c5a2d59b246cabd9bdff1fbef48e7f58c5b77ad8b78d6",
+      "team_rows": 30,
+      "opponent_rows": 30,
+      "source_updated_at": {
+        "team": "2026-11-06T14:00:08.757+00:00",
+        "opponent": "2026-11-06T14:00:08.863+00:00"
+      },
+      "file": "teams.json"
+    }
+  ]
+}

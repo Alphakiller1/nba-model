@@ -334,6 +334,8 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
     out.mkdir(parents=True, exist_ok=True)
     for name, payload in (("board.json", board), ("slate.json", public_slate), ("build.json", build_info)):
         (out / name).write_text(json.dumps(payload, indent=1, default=str) + "\n", encoding="utf-8")
+    from . import evidence
+    evidence.write(out, season)
     return board
 
 
