@@ -9,3 +9,5 @@ _evidence/
 .ruff_cache/
 data/nbastats/refresh.log
 data/nbastats/task.log
+nba-live-build.log
+dynamics-final.log

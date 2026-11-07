@@ -7,11 +7,26 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import authority, bbref, bulk, coverage, databallr, export, ingest, ledger, nbastats, site
+from . import (
+    authority,
+    bbref,
+    bulk,
+    coverage,
+    databallr,
+    dynamics_model,
+    dynamics_validation,
+    export,
+    ingest,
+    ledger,
+    nbastats,
+    site,
+    tracking_tactics,
+)
 
 
 def _refresh(args: argparse.Namespace) -> int:
@@ -45,6 +60,10 @@ def _refresh(args: argparse.Namespace) -> int:
                 print(name, year, refresh(year))
             except Exception as exc:
                 print(f"{name} {year}: {type(exc).__name__}; retaining the dated last snapshot")
+    try:
+        print("Public experimental tracking", tracking_tactics.refresh(season))
+    except Exception as exc:
+        print(f"Public experimental tracking: {type(exc).__name__}; retaining the dated last snapshot")
     return 0
 
 
@@ -74,6 +93,26 @@ def _status(_: argparse.Namespace) -> int:
     return 0
 
 
+def _analyze(args: argparse.Namespace) -> int:
+    as_of = args.as_of or datetime.now(timezone.utc).isoformat()
+    season = export.current_season(datetime.fromisoformat(as_of.replace("Z", "+00:00")))
+    payload = dynamics_model.build(season, as_of)
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "model_analysis.json").write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8")
+    if args.validate:
+        report, rows = dynamics_validation.evaluate(dynamics_model.observations((season - 2, season - 1, season)),
+                                                     season, as_of, 48)
+        (out / "dynamics_validation.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+        with (out / "dynamics_predictions.csv").open("w", newline="", encoding="utf-8") as stream:
+            writer = csv.DictWriter(stream, fieldnames=list(rows[0]) if rows else ["season"])
+            writer.writeheader()
+            writer.writerows(rows)
+        print(json.dumps(report, indent=2))
+    print("model analysis", {year: len(bank) for year, bank in payload["seasons"].items()})
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="nba-model")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -87,6 +126,11 @@ def main(argv: list[str] | None = None) -> int:
     b.set_defaults(fn=_build)
     s = sub.add_parser("status")
     s.set_defaults(fn=_status)
+    a = sub.add_parser("analyze")
+    a.add_argument("--as-of")
+    a.add_argument("--out", default="_evidence")
+    a.add_argument("--validate", action="store_true")
+    a.set_defaults(fn=_analyze)
     args = ap.parse_args(argv)
     return args.fn(args)
 

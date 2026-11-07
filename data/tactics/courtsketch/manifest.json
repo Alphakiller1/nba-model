@@ -1,0 +1,2985 @@
+{
+  "source": "CourtSketch public tracking viewer",
+  "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+  "source_url": "https://courtsketch.com/tracking",
+  "games": [
+    {
+      "away": "MIA",
+      "away_score": 100,
+      "complete": true,
+      "date": "2026-11-05",
+      "home": "GSW",
+      "home_score": 120,
+      "id": "0022600188",
+      "names": [
+        "Miami",
+        "Heat",
+        "Golden State",
+        "Warriors"
+      ],
+      "shot_tracking": {
+        "fga": 166,
+        "tracked": 163
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600188",
+      "sha256": "b8e99bd29af3567b37c7a0bdb1e79b8df087115448b2556ea52dcc639253295e"
+    },
+    {
+      "away": "ORL",
+      "away_score": 104,
+      "complete": true,
+      "date": "2026-11-05",
+      "home": "PHX",
+      "home_score": 117,
+      "id": "0022600187",
+      "names": [
+        "Orlando",
+        "Magic",
+        "Phoenix",
+        "Suns"
+      ],
+      "shot_tracking": {
+        "fga": 168,
+        "tracked": 163
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600187",
+      "sha256": "666606e9a1b60960812e8fd0ee19e1c1d84fd4869ea1649860739642b5184336"
+    },
+    {
+      "away": "MIA",
+      "away_score": 117,
+      "complete": false,
+      "date": "2026-11-04",
+      "home": "LAC",
+      "home_score": 116,
+      "id": "0022600186",
+      "names": [
+        "Miami",
+        "Heat",
+        "LA",
+        "Clippers"
+      ],
+      "shot_tracking": {
+        "fga": 190,
+        "tracked": 135
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600186",
+      "sha256": "523f32b7614d091097a955ca21d73d678727af692d9774c309baab5f670d945b"
+    },
+    {
+      "away": "LAL",
+      "away_score": 116,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "SAC",
+      "home_score": 103,
+      "id": "0022600185",
+      "names": [
+        "Los Angeles",
+        "Lakers",
+        "Sacramento",
+        "Kings"
+      ],
+      "shot_tracking": {
+        "fga": 168,
+        "tracked": 155
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600185",
+      "sha256": "f9852a55117e42308789be5ea5b352139c68e1618530abac20477d1d367ce02d"
+    },
+    {
+      "away": "DAL",
+      "away_score": 111,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "SAS",
+      "home_score": 112,
+      "id": "0022600184",
+      "names": [
+        "Dallas",
+        "Mavericks",
+        "San Antonio",
+        "Spurs"
+      ],
+      "shot_tracking": {
+        "fga": 197,
+        "tracked": 178
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600184",
+      "sha256": "99fc7c11927fa4b90eab18245da9ccdd20ab456c4ef67cd5ae416f57fce127a1"
+    },
+    {
+      "away": "POR",
+      "away_score": 132,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "PHX",
+      "home_score": 119,
+      "id": "0022600183",
+      "names": [
+        "Portland",
+        "Trail Blazers",
+        "Phoenix",
+        "Suns"
+      ],
+      "shot_tracking": {
+        "fga": 178,
+        "tracked": 166
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600183",
+      "sha256": "3c9a8d6f353dc89d560b2d99815cb6b6652a49369758681a758eb61870ce8ec2"
+    },
+    {
+      "away": "TOR",
+      "away_score": 109,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "DEN",
+      "home_score": 128,
+      "id": "0022600182",
+      "names": [
+        "Toronto",
+        "Raptors",
+        "Denver",
+        "Nuggets"
+      ],
+      "shot_tracking": {
+        "fga": 163,
+        "tracked": 155
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600182",
+      "sha256": "51d472a24fa8613266f0c6c48f905e5fa80de72a8b18e52907229d23125b4de0"
+    },
+    {
+      "away": "MIN",
+      "away_score": 117,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "HOU",
+      "home_score": 107,
+      "id": "0022600181",
+      "names": [
+        "Minnesota",
+        "Timberwolves",
+        "Houston",
+        "Rockets"
+      ],
+      "shot_tracking": {
+        "fga": 169,
+        "tracked": 161
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600181",
+      "sha256": "f91a35564f9ff4014fd8f37a5c0bba23e081ab21aae14148e3e56f9f804fcba1"
+    },
+    {
+      "away": "CLE",
+      "away_score": 116,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "OKC",
+      "home_score": 124,
+      "id": "0022600180",
+      "names": [
+        "Cleveland",
+        "Cavaliers",
+        "Oklahoma City",
+        "Thunder"
+      ],
+      "shot_tracking": {
+        "fga": 182,
+        "tracked": 175
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600180",
+      "sha256": "517bfcf5022c5256b99ed6fbbb9239c5263ee2c7460547030ff2c088180aff41"
+    },
+    {
+      "away": "UTA",
+      "away_score": 113,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "NOP",
+      "home_score": 120,
+      "id": "0022600179",
+      "names": [
+        "Utah",
+        "Jazz",
+        "New Orleans",
+        "Pelicans"
+      ],
+      "shot_tracking": {
+        "fga": 183,
+        "tracked": 157
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600179",
+      "sha256": "2ab7dc3a95651a831f2b1b391b3da2a5801433d9c4531781e241839b8ca7439b"
+    },
+    {
+      "away": "IND",
+      "away_score": 107,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "MEM",
+      "home_score": 103,
+      "id": "0022600178",
+      "names": [
+        "Indiana",
+        "Pacers",
+        "Memphis",
+        "Grizzlies"
+      ],
+      "shot_tracking": {
+        "fga": 179,
+        "tracked": 172
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600178",
+      "sha256": "102d12842df679cef8327d9f7c197599e380be32bdd80915846e3de359568916"
+    },
+    {
+      "away": "CHI",
+      "away_score": 105,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "NYK",
+      "home_score": 135,
+      "id": "0022600177",
+      "names": [
+        "Chicago",
+        "Bulls",
+        "New York",
+        "Knicks"
+      ],
+      "shot_tracking": {
+        "fga": 183,
+        "tracked": 179
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600177",
+      "sha256": "a735ab12e4373717c36f81b99f08274c7814bfeef511c7d4bf2a722c93f72c42"
+    },
+    {
+      "away": "CHA",
+      "away_score": 104,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "BKN",
+      "home_score": 114,
+      "id": "0022600176",
+      "names": [
+        "Charlotte",
+        "Hornets",
+        "Brooklyn",
+        "Nets"
+      ],
+      "shot_tracking": {
+        "fga": 156,
+        "tracked": 151
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600176",
+      "sha256": "8eb9f40c95dc40928da5da37e26856a5cfbc7f0b5a508687c3f1bf13f0772f7b"
+    },
+    {
+      "away": "MIL",
+      "away_score": 102,
+      "complete": false,
+      "date": "2026-11-04",
+      "home": "BOS",
+      "home_score": 109,
+      "id": "0022600175",
+      "names": [
+        "Milwaukee",
+        "Bucks",
+        "Boston",
+        "Celtics"
+      ],
+      "shot_tracking": {
+        "fga": 176,
+        "tracked": 148
+      },
+      "tracked_until": "Q4 0:16.2",
+      "tracking_gaps": [
+        {
+          "from": "Q1 12:00",
+          "plays": 43,
+          "to": "Q1 7:10"
+        }
+      ],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600175",
+      "sha256": "737b98a85b57ba1e048e22562e3591a0563afd2407dd49689d9e8174cfc01011"
+    },
+    {
+      "away": "ATL",
+      "away_score": 120,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "WAS",
+      "home_score": 105,
+      "id": "0022600174",
+      "names": [
+        "Atlanta",
+        "Hawks",
+        "Washington",
+        "Wizards"
+      ],
+      "shot_tracking": {
+        "fga": 189,
+        "tracked": 185
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600174",
+      "sha256": "7b4c2e6b3c443de835475b6e11355a27a5f244308b6744466aee7d3b8edcedd0"
+    },
+    {
+      "away": "PHI",
+      "away_score": 112,
+      "complete": true,
+      "date": "2026-11-04",
+      "home": "DET",
+      "home_score": 106,
+      "id": "0022600173",
+      "names": [
+        "Philadelphia",
+        "76ers",
+        "Detroit",
+        "Pistons"
+      ],
+      "shot_tracking": {
+        "fga": 169,
+        "tracked": 160
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600173",
+      "sha256": "3dcbcf83eda144bffea53b05f96ef29deea931f00e49dd6c0db61b0f884d2c4a"
+    },
+    {
+      "away": "MIA",
+      "away_score": 117,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "LAL",
+      "home_score": 138,
+      "id": "0022600172",
+      "names": [
+        "Miami",
+        "Heat",
+        "Los Angeles",
+        "Lakers"
+      ],
+      "shot_tracking": {
+        "fga": 164,
+        "tracked": 154
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600172",
+      "sha256": "3aa68fa550679a60598a0aefc55fcd4279ded63388706cd713a0934a57afe730"
+    },
+    {
+      "away": "TOR",
+      "away_score": 125,
+      "complete": false,
+      "date": "2026-11-02",
+      "home": "LAC",
+      "home_score": 118,
+      "id": "0022600171",
+      "names": [
+        "Toronto",
+        "Raptors",
+        "LA",
+        "Clippers"
+      ],
+      "shot_tracking": {
+        "fga": 174,
+        "tracked": 99
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600171",
+      "sha256": "c95ccf65db3f3460a0df44a879f4fcac9338847e5b9e960f1358fec497e17f39"
+    },
+    {
+      "away": "PHX",
+      "away_score": 113,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "GSW",
+      "home_score": 116,
+      "id": "0022600170",
+      "names": [
+        "Phoenix",
+        "Suns",
+        "Golden State",
+        "Warriors"
+      ],
+      "shot_tracking": {
+        "fga": 169,
+        "tracked": 159
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600170",
+      "sha256": "bf37be04a42d858388558110b75ecf3ae0057a650fdcad1cc0e1c027b7d5041b"
+    },
+    {
+      "away": "POR",
+      "away_score": 118,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "DEN",
+      "home_score": 110,
+      "id": "0022600169",
+      "names": [
+        "Portland",
+        "Trail Blazers",
+        "Denver",
+        "Nuggets"
+      ],
+      "shot_tracking": {
+        "fga": 169,
+        "tracked": 162
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600169",
+      "sha256": "ef7c687abd3b3de71574d3353ed9fa8673f3083f49787dfcaa5eecdadbc62716"
+    },
+    {
+      "away": "UTA",
+      "away_score": 97,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "SAS",
+      "home_score": 119,
+      "id": "0022600168",
+      "names": [
+        "Utah",
+        "Jazz",
+        "San Antonio",
+        "Spurs"
+      ],
+      "shot_tracking": {
+        "fga": 187,
+        "tracked": 177
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600168",
+      "sha256": "78d3d29e1614bc63b949b6c8bb03839e4a9730237d74b0520ce39f496ed483a3"
+    },
+    {
+      "away": "BOS",
+      "away_score": 93,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "HOU",
+      "home_score": 109,
+      "id": "0022600167",
+      "names": [
+        "Boston",
+        "Celtics",
+        "Houston",
+        "Rockets"
+      ],
+      "shot_tracking": {
+        "fga": 162,
+        "tracked": 156
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600167",
+      "sha256": "3d303a8ff3eb0824e4f6617b9c671c211ff555f1e83cfddaa7577eb3cc9ee7aa"
+    },
+    {
+      "away": "MIL",
+      "away_score": 100,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "MIN",
+      "home_score": 112,
+      "id": "0022600166",
+      "names": [
+        "Milwaukee",
+        "Bucks",
+        "Minnesota",
+        "Timberwolves"
+      ],
+      "shot_tracking": {
+        "fga": 195,
+        "tracked": 175
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600166",
+      "sha256": "b4d292cf2871f955387e51135187a7e16c7bb4b9246fd0b5f74d5891b05e8441"
+    },
+    {
+      "away": "NOP",
+      "away_score": 135,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "MEM",
+      "home_score": 134,
+      "id": "0022600165",
+      "names": [
+        "New Orleans",
+        "Pelicans",
+        "Memphis",
+        "Grizzlies"
+      ],
+      "shot_tracking": {
+        "fga": 192,
+        "tracked": 168
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600165",
+      "sha256": "4a7700db81af21bc836360c76a9d7af25e29d1d7623c53f1a354fadb41e7bffe"
+    },
+    {
+      "away": "SAC",
+      "away_score": 115,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "DAL",
+      "home_score": 100,
+      "id": "0022600164",
+      "names": [
+        "Sacramento",
+        "Kings",
+        "Dallas",
+        "Mavericks"
+      ],
+      "shot_tracking": {
+        "fga": 160,
+        "tracked": 153
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600164",
+      "sha256": "c662292c99848e7f836252afbd81f5226130158c9a4558344e88f46cbdedbd33"
+    },
+    {
+      "away": "CHI",
+      "away_score": 107,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "PHI",
+      "home_score": 126,
+      "id": "0022600163",
+      "names": [
+        "Chicago",
+        "Bulls",
+        "Philadelphia",
+        "76ers"
+      ],
+      "shot_tracking": {
+        "fga": 180,
+        "tracked": 164
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600163",
+      "sha256": "2a8bc1e738ef0e8e7484d1e277557d5817d62f41df0750f749333b21be3babe1"
+    },
+    {
+      "away": "WAS",
+      "away_score": 103,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "ORL",
+      "home_score": 94,
+      "id": "0022600162",
+      "names": [
+        "Washington",
+        "Wizards",
+        "Orlando",
+        "Magic"
+      ],
+      "shot_tracking": {
+        "fga": 155,
+        "tracked": 136
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600162",
+      "sha256": "20fc55b045eb6e9e071483dcd91f2eb0c775dc105632349f463c1deea4fca9f7"
+    },
+    {
+      "away": "BKN",
+      "away_score": 90,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "NYK",
+      "home_score": 103,
+      "id": "0022600161",
+      "names": [
+        "Brooklyn",
+        "Nets",
+        "New York",
+        "Knicks"
+      ],
+      "shot_tracking": {
+        "fga": 151,
+        "tracked": 144
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600161",
+      "sha256": "9fae93590f47a9cc599adccfaae57164d348c6e655b3e92a096450829b824dcc"
+    },
+    {
+      "away": "ATL",
+      "away_score": 108,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "IND",
+      "home_score": 104,
+      "id": "0022600160",
+      "names": [
+        "Atlanta",
+        "Hawks",
+        "Indiana",
+        "Pacers"
+      ],
+      "shot_tracking": {
+        "fga": 183,
+        "tracked": 148
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600160",
+      "sha256": "66394ff9582bd5391aeb7b68c9e71daadd2f99f372a0f9ec2aea980e5b8caadc"
+    },
+    {
+      "away": "DET",
+      "away_score": 124,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "CHA",
+      "home_score": 91,
+      "id": "0022600159",
+      "names": [
+        "Detroit",
+        "Pistons",
+        "Charlotte",
+        "Hornets"
+      ],
+      "shot_tracking": {
+        "fga": 166,
+        "tracked": 154
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600159",
+      "sha256": "ce7bba2a3f955f759db805a5ee681dfa82d6d48d7f6b885d7e4e83a93cc94dff"
+    },
+    {
+      "away": "OKC",
+      "away_score": 117,
+      "complete": true,
+      "date": "2026-11-02",
+      "home": "CLE",
+      "home_score": 112,
+      "id": "0022600158",
+      "names": [
+        "Oklahoma City",
+        "Thunder",
+        "Cleveland",
+        "Cavaliers"
+      ],
+      "shot_tracking": {
+        "fga": 188,
+        "tracked": 179
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600158",
+      "sha256": "db662f5b4a9e50a01ea696ebd80e015f57e17c35ddeca8d2a6d98e81a59eaac4"
+    },
+    {
+      "away": "TOR",
+      "away_score": 125,
+      "complete": true,
+      "date": "2026-11-01",
+      "home": "LAL",
+      "home_score": 131,
+      "id": "0022600157",
+      "names": [
+        "Toronto",
+        "Raptors",
+        "Los Angeles",
+        "Lakers"
+      ],
+      "shot_tracking": {
+        "fga": 185,
+        "tracked": 180
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600157",
+      "sha256": "19b0a2b64f4263c55403fd881e80a18076746f6743c0aa7be99751205dff3115"
+    },
+    {
+      "away": "LAC",
+      "away_score": 112,
+      "complete": true,
+      "date": "2026-11-01",
+      "home": "GSW",
+      "home_score": 124,
+      "id": "0022600156",
+      "names": [
+        "LA",
+        "Clippers",
+        "Golden State",
+        "Warriors"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 166
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600156",
+      "sha256": "c1718f8ede5c6e536dab3bdc67273cc1d004504811388351fbba25741c514f48"
+    },
+    {
+      "away": "BKN",
+      "away_score": 98,
+      "complete": true,
+      "date": "2026-11-01",
+      "home": "IND",
+      "home_score": 90,
+      "id": "0022600155",
+      "names": [
+        "Brooklyn",
+        "Nets",
+        "Indiana",
+        "Pacers"
+      ],
+      "shot_tracking": {
+        "fga": 143,
+        "tracked": 141
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600155",
+      "sha256": "b0009eca7e5cd5ff049b2d568cf979ebd092ed242910eba9294233d89d96b3d1"
+    },
+    {
+      "away": "BOS",
+      "away_score": 108,
+      "complete": true,
+      "date": "2026-11-01",
+      "home": "ORL",
+      "home_score": 97,
+      "id": "0022600154",
+      "names": [
+        "Boston",
+        "Celtics",
+        "Orlando",
+        "Magic"
+      ],
+      "shot_tracking": {
+        "fga": 165,
+        "tracked": 154
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600154",
+      "sha256": "faa09359fc74ad710309d4e2186d36bc1e2276d62110ffc3d4e3f19c923df94b"
+    },
+    {
+      "away": "OKC",
+      "away_score": 98,
+      "complete": true,
+      "date": "2026-10-31",
+      "home": "HOU",
+      "home_score": 119,
+      "id": "0022600153",
+      "names": [
+        "Oklahoma City",
+        "Thunder",
+        "Houston",
+        "Rockets"
+      ],
+      "shot_tracking": {
+        "fga": 175,
+        "tracked": 167
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600153",
+      "sha256": "1411023b90f826701c48c7bfac75b1c367ab8d9262c1ce9bc51945464ea14481"
+    },
+    {
+      "away": "MIN",
+      "away_score": 111,
+      "complete": true,
+      "date": "2026-10-31",
+      "home": "SAS",
+      "home_score": 121,
+      "id": "0022600152",
+      "names": [
+        "Minnesota",
+        "Timberwolves",
+        "San Antonio",
+        "Spurs"
+      ],
+      "shot_tracking": {
+        "fga": 180,
+        "tracked": 147
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600152",
+      "sha256": "09ccd5b7a4d3edc84476fb862aaf56c02f7517ccb038a6f6fd23b79958bfa077"
+    },
+    {
+      "away": "CLE",
+      "away_score": 136,
+      "complete": true,
+      "date": "2026-10-31",
+      "home": "MIL",
+      "home_score": 111,
+      "id": "0022600151",
+      "names": [
+        "Cleveland",
+        "Cavaliers",
+        "Milwaukee",
+        "Bucks"
+      ],
+      "shot_tracking": {
+        "fga": 200,
+        "tracked": 194
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600151",
+      "sha256": "03cff046838e28311463514982dbedc55c56ee5bc45fef429c995d26623fefd3"
+    },
+    {
+      "away": "SAC",
+      "away_score": 105,
+      "complete": true,
+      "date": "2026-10-31",
+      "home": "MEM",
+      "home_score": 136,
+      "id": "0022600150",
+      "names": [
+        "Sacramento",
+        "Kings",
+        "Memphis",
+        "Grizzlies"
+      ],
+      "shot_tracking": {
+        "fga": 171,
+        "tracked": 168
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600150",
+      "sha256": "79ee1efc078c56feb55216ddf628bf313ceb793f1e55a6c642afbb3716d7419e"
+    },
+    {
+      "away": "ATL",
+      "away_score": 99,
+      "complete": true,
+      "date": "2026-10-31",
+      "home": "NOP",
+      "home_score": 121,
+      "id": "0022600149",
+      "names": [
+        "Atlanta",
+        "Hawks",
+        "New Orleans",
+        "Pelicans"
+      ],
+      "shot_tracking": {
+        "fga": 167,
+        "tracked": 153
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600149",
+      "sha256": "8d621ebeb12035314aecbfcdca3095d536fda72a1790de1503db8d375907f4f4"
+    },
+    {
+      "away": "PHI",
+      "away_score": 109,
+      "complete": true,
+      "date": "2026-10-31",
+      "home": "CHA",
+      "home_score": 104,
+      "id": "0022600148",
+      "names": [
+        "Philadelphia",
+        "76ers",
+        "Charlotte",
+        "Hornets"
+      ],
+      "shot_tracking": {
+        "fga": 162,
+        "tracked": 156
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600148",
+      "sha256": "67483dfafd52e3f79fd5807b5ab753b4c58d0ddc7a7af9a3dfc8209ac6f4f340"
+    },
+    {
+      "away": "POR",
+      "away_score": 112,
+      "complete": true,
+      "date": "2026-10-31",
+      "home": "UTA",
+      "home_score": 90,
+      "id": "0022600147",
+      "names": [
+        "Portland",
+        "Trail Blazers",
+        "Utah",
+        "Jazz"
+      ],
+      "shot_tracking": {
+        "fga": 154,
+        "tracked": 147
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600147",
+      "sha256": "5eda19c31ff43f69921a20f0b30f4bae883b4f93649710ca96245d1a7056d5a0"
+    },
+    {
+      "away": "DEN",
+      "away_score": 127,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "PHX",
+      "home_score": 120,
+      "id": "0022600024",
+      "names": [
+        "Denver",
+        "Nuggets",
+        "Phoenix",
+        "Suns"
+      ],
+      "shot_tracking": {
+        "fga": 174,
+        "tracked": 165
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600024",
+      "sha256": "8ce027ac2d251e4bf5dc7f458fb23f81041dfe5792a2e47680a202f5df232037"
+    },
+    {
+      "away": "LAL",
+      "away_score": 95,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "GSW",
+      "home_score": 112,
+      "id": "0022600023",
+      "names": [
+        "Los Angeles",
+        "Lakers",
+        "Golden State",
+        "Warriors"
+      ],
+      "shot_tracking": {
+        "fga": 171,
+        "tracked": 157
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600023",
+      "sha256": "80c0e004f491abe35428ac8b417be84e0458baa03253f351e7df4c974e9301ef"
+    },
+    {
+      "away": "LAC",
+      "away_score": 101,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "MIN",
+      "home_score": 127,
+      "id": "0022600022",
+      "names": [
+        "LA",
+        "Clippers",
+        "Minnesota",
+        "Timberwolves"
+      ],
+      "shot_tracking": {
+        "fga": 180,
+        "tracked": 170
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600022",
+      "sha256": "6c7707ae4d38c67a954c8976127dd02027275465385aed0cc859097f1aea02da"
+    },
+    {
+      "away": "HOU",
+      "away_score": 111,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "DAL",
+      "home_score": 116,
+      "id": "0022600021",
+      "names": [
+        "Houston",
+        "Rockets",
+        "Dallas",
+        "Mavericks"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 161
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600021",
+      "sha256": "11328d0051b45e96194f5761617ce465d3d3e515c0b7241749214d4beda11c83"
+    },
+    {
+      "away": "IND",
+      "away_score": 125,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "MIA",
+      "home_score": 145,
+      "id": "0022600020",
+      "names": [
+        "Indiana",
+        "Pacers",
+        "Miami",
+        "Heat"
+      ],
+      "shot_tracking": {
+        "fga": 184,
+        "tracked": 173
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600020",
+      "sha256": "a1df3c2e39530c41d60839359b75644e89ff04528969d8be014bcaaae66d71ed"
+    },
+    {
+      "away": "ORL",
+      "away_score": 121,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "TOR",
+      "home_score": 114,
+      "id": "0022600019",
+      "names": [
+        "Orlando",
+        "Magic",
+        "Toronto",
+        "Raptors"
+      ],
+      "shot_tracking": {
+        "fga": 165,
+        "tracked": 158
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600019",
+      "sha256": "963c3a3aad4ffd5edd28ac08c8dfe43ed6720f394a15e2777f87fa653a294b0d"
+    },
+    {
+      "away": "NYK",
+      "away_score": 93,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "PHI",
+      "home_score": 98,
+      "id": "0022600018",
+      "names": [
+        "New York",
+        "Knicks",
+        "Philadelphia",
+        "76ers"
+      ],
+      "shot_tracking": {
+        "fga": 161,
+        "tracked": 152
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600018",
+      "sha256": "97da71266d454e927cc402fdfaebb8746f2ca02a6a87f766793151f851ed3eae"
+    },
+    {
+      "away": "DET",
+      "away_score": 110,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "BKN",
+      "home_score": 94,
+      "id": "0022600017",
+      "names": [
+        "Detroit",
+        "Pistons",
+        "Brooklyn",
+        "Nets"
+      ],
+      "shot_tracking": {
+        "fga": 167,
+        "tracked": 162
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600017",
+      "sha256": "91888e2e01c251fffa118d0914ab69525e57c5a7fab1929ddf2dadb80048ac05"
+    },
+    {
+      "away": "CHI",
+      "away_score": 111,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "BOS",
+      "home_score": 125,
+      "id": "0022600016",
+      "names": [
+        "Chicago",
+        "Bulls",
+        "Boston",
+        "Celtics"
+      ],
+      "shot_tracking": {
+        "fga": 174,
+        "tracked": 170
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600016",
+      "sha256": "de26116eda78fc80ecfd52f9248c21551d219e856a62cc4bc9d896804ec341d3"
+    },
+    {
+      "away": "CHA",
+      "away_score": 79,
+      "complete": true,
+      "date": "2026-10-30",
+      "home": "WAS",
+      "home_score": 95,
+      "id": "0022600015",
+      "names": [
+        "Charlotte",
+        "Hornets",
+        "Washington",
+        "Wizards"
+      ],
+      "shot_tracking": {
+        "fga": 173,
+        "tracked": 170
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600015",
+      "sha256": "902144a99f0f3c60d9095174783a21c564afc89614a95046f2eaab3e6aa3f5a6"
+    },
+    {
+      "away": "MEM",
+      "away_score": 124,
+      "complete": true,
+      "date": "2026-10-29",
+      "home": "POR",
+      "home_score": 103,
+      "id": "0022600146",
+      "names": [
+        "Memphis",
+        "Grizzlies",
+        "Portland",
+        "Trail Blazers"
+      ],
+      "shot_tracking": {
+        "fga": 193,
+        "tracked": 180
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600146",
+      "sha256": "5ea1bcc4cf82c1dd05ce9de059ddc1793bf37495de7440f412e34040150730d7"
+    },
+    {
+      "away": "SAC",
+      "away_score": 120,
+      "complete": true,
+      "date": "2026-10-29",
+      "home": "NOP",
+      "home_score": 132,
+      "id": "0022600145",
+      "names": [
+        "Sacramento",
+        "Kings",
+        "New Orleans",
+        "Pelicans"
+      ],
+      "shot_tracking": {
+        "fga": 173,
+        "tracked": 164
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600145",
+      "sha256": "e637d0382ac14ab19d4ae1af7fac6d3da2a0c64bf2a6989515819dac08a197bf"
+    },
+    {
+      "away": "CLE",
+      "away_score": 111,
+      "complete": true,
+      "date": "2026-10-29",
+      "home": "ATL",
+      "home_score": 114,
+      "id": "0022600144",
+      "names": [
+        "Cleveland",
+        "Cavaliers",
+        "Atlanta",
+        "Hawks"
+      ],
+      "shot_tracking": {
+        "fga": 182,
+        "tracked": 176
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600144",
+      "sha256": "40991f79e6d9f09727d69d114e457b80b5e6cd00a277ee2caef49024d918f0a1"
+    },
+    {
+      "away": "LAL",
+      "away_score": 103,
+      "complete": false,
+      "date": "2026-10-28",
+      "home": "LAC",
+      "home_score": 87,
+      "id": "0022600143",
+      "names": [
+        "Los Angeles",
+        "Lakers",
+        "LA",
+        "Clippers"
+      ],
+      "shot_tracking": {
+        "fga": 153,
+        "tracked": 24
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600143",
+      "sha256": "b5b66a25aded0639a4a81b322b1206abd390f0b5c40e18ef86e8c5862e6a049f"
+    },
+    {
+      "away": "OKC",
+      "away_score": 96,
+      "complete": false,
+      "date": "2026-10-28",
+      "home": "DAL",
+      "home_score": 120,
+      "id": "0022600142",
+      "names": [
+        "Oklahoma City",
+        "Thunder",
+        "Dallas",
+        "Mavericks"
+      ],
+      "shot_tracking": {
+        "fga": 184,
+        "tracked": 0
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600142",
+      "sha256": "e8f0ae19f27442b6b0fc33d72a91986bc997859d617a6d75dc093401ea2feb20"
+    },
+    {
+      "away": "SAS",
+      "away_score": 117,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "UTA",
+      "home_score": 111,
+      "id": "0022600141",
+      "names": [
+        "San Antonio",
+        "Spurs",
+        "Utah",
+        "Jazz"
+      ],
+      "shot_tracking": {
+        "fga": 193,
+        "tracked": 178
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600141",
+      "sha256": "4b7948cd5e1696048df3754c34ef8a57f806eb666f6278d1a3ecb17909f1da4f"
+    },
+    {
+      "away": "DEN",
+      "away_score": 104,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "NOP",
+      "home_score": 91,
+      "id": "0022600140",
+      "names": [
+        "Denver",
+        "Nuggets",
+        "New Orleans",
+        "Pelicans"
+      ],
+      "shot_tracking": {
+        "fga": 162,
+        "tracked": 152
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600140",
+      "sha256": "d1c10d9a0b433fca8661fb9a8aab328bfce7cce70bbfef8d9fa65d6168e1af15"
+    },
+    {
+      "away": "GSW",
+      "away_score": 119,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "MIN",
+      "home_score": 114,
+      "id": "0022600139",
+      "names": [
+        "Golden State",
+        "Warriors",
+        "Minnesota",
+        "Timberwolves"
+      ],
+      "shot_tracking": {
+        "fga": 179,
+        "tracked": 170
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600139",
+      "sha256": "7f655b680af2ab5cc730e569526dc3735a7d35d731413c8ecca108e1175cbf4f"
+    },
+    {
+      "away": "HOU",
+      "away_score": 132,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "MIL",
+      "home_score": 100,
+      "id": "0022600138",
+      "names": [
+        "Houston",
+        "Rockets",
+        "Milwaukee",
+        "Bucks"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 167
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600138",
+      "sha256": "3d4f0a506c3e7c6199860e45284e42e2a7fca0d30610c73f929168cc08e56a92"
+    },
+    {
+      "away": "NYK",
+      "away_score": 133,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "CHI",
+      "home_score": 127,
+      "id": "0022600137",
+      "names": [
+        "New York",
+        "Knicks",
+        "Chicago",
+        "Bulls"
+      ],
+      "shot_tracking": {
+        "fga": 196,
+        "tracked": 185
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600137",
+      "sha256": "10d651f9703978c9e86dbc4375fec2b04e4f6990bfc4f6bb7a4cb2587b752bc1"
+    },
+    {
+      "away": "ORL",
+      "away_score": 99,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "TOR",
+      "home_score": 129,
+      "id": "0022600136",
+      "names": [
+        "Orlando",
+        "Magic",
+        "Toronto",
+        "Raptors"
+      ],
+      "shot_tracking": {
+        "fga": 168,
+        "tracked": 158
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600136",
+      "sha256": "7a8f7027c4fcd6c6591afa2ff4b64032d2e00e95c702af946dcbaf58a072b795"
+    },
+    {
+      "away": "PHI",
+      "away_score": 114,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "IND",
+      "home_score": 109,
+      "id": "0022600135",
+      "names": [
+        "Philadelphia",
+        "76ers",
+        "Indiana",
+        "Pacers"
+      ],
+      "shot_tracking": {
+        "fga": 174,
+        "tracked": 166
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600135",
+      "sha256": "05bfc488569a83c56dd71884106308fb82121ac1347482e011526d31fd9cf500"
+    },
+    {
+      "away": "CHA",
+      "away_score": 89,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "DET",
+      "home_score": 97,
+      "id": "0022600134",
+      "names": [
+        "Charlotte",
+        "Hornets",
+        "Detroit",
+        "Pistons"
+      ],
+      "shot_tracking": {
+        "fga": 147,
+        "tracked": 143
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600134",
+      "sha256": "65e0b56a13f558e20f4675513cf38692bf2a19337e4d4e5e0587e03ef24cd78f"
+    },
+    {
+      "away": "WAS",
+      "away_score": 111,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "CLE",
+      "home_score": 121,
+      "id": "0022600133",
+      "names": [
+        "Washington",
+        "Wizards",
+        "Cleveland",
+        "Cavaliers"
+      ],
+      "shot_tracking": {
+        "fga": 174,
+        "tracked": 169
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600133",
+      "sha256": "34e343a8a460b5df2070618d1b026b3f196e06797253a3abaf405ffa07334f6f"
+    },
+    {
+      "away": "MIA",
+      "away_score": 129,
+      "complete": true,
+      "date": "2026-10-28",
+      "home": "ATL",
+      "home_score": 117,
+      "id": "0022600132",
+      "names": [
+        "Miami",
+        "Heat",
+        "Atlanta",
+        "Hawks"
+      ],
+      "shot_tracking": {
+        "fga": 192,
+        "tracked": 182
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600132",
+      "sha256": "42747b69c4772708e3a40df18e7dcaadbcc45343d2376590ea4796b2d14f06bf"
+    },
+    {
+      "away": "POR",
+      "away_score": 136,
+      "complete": true,
+      "date": "2026-10-27",
+      "home": "LAL",
+      "home_score": 129,
+      "id": "0022600131",
+      "names": [
+        "Portland",
+        "Trail Blazers",
+        "Los Angeles",
+        "Lakers"
+      ],
+      "shot_tracking": {
+        "fga": 158,
+        "tracked": 154
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600131",
+      "sha256": "5ecf1f77a2188b69f7bb4bd65fc8af0560c6272be2fbb7206a9d688c55e0a12d"
+    },
+    {
+      "away": "SAC",
+      "away_score": 103,
+      "complete": true,
+      "date": "2026-10-27",
+      "home": "SAS",
+      "home_score": 130,
+      "id": "0022600130",
+      "names": [
+        "Sacramento",
+        "Kings",
+        "San Antonio",
+        "Spurs"
+      ],
+      "shot_tracking": {
+        "fga": 183,
+        "tracked": 170
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600130",
+      "sha256": "15f6113c77ed2baf17201b8f76f7484e079d11c9b3a48162e2fbbf46f63031fe"
+    },
+    {
+      "away": "DET",
+      "away_score": 97,
+      "complete": true,
+      "date": "2026-10-27",
+      "home": "NYK",
+      "home_score": 111,
+      "id": "0022600129",
+      "names": [
+        "Detroit",
+        "Pistons",
+        "New York",
+        "Knicks"
+      ],
+      "shot_tracking": {
+        "fga": 175,
+        "tracked": 162
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600129",
+      "sha256": "aee93bf364362b43fd9016cb025ca73ae12712b850e9679c8aeb552adec27e03"
+    },
+    {
+      "away": "BKN",
+      "away_score": 124,
+      "complete": true,
+      "date": "2026-10-27",
+      "home": "BOS",
+      "home_score": 125,
+      "id": "0022600128",
+      "names": [
+        "Brooklyn",
+        "Nets",
+        "Boston",
+        "Celtics"
+      ],
+      "shot_tracking": {
+        "fga": 190,
+        "tracked": 184
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600128",
+      "sha256": "3954a0f36772d802c34a3c2a897952bb4ae34545987b7ee2422bb22530a8c3be"
+    },
+    {
+      "away": "GSW",
+      "away_score": 134,
+      "complete": true,
+      "date": "2026-10-26",
+      "home": "DEN",
+      "home_score": 114,
+      "id": "0022600127",
+      "names": [
+        "Golden State",
+        "Warriors",
+        "Denver",
+        "Nuggets"
+      ],
+      "shot_tracking": {
+        "fga": 169,
+        "tracked": 156
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600127",
+      "sha256": "a5617b0f9f348837407e4e822dd626c1b9abc6d9c09fc2d5c7738d63dfc081c5"
+    },
+    {
+      "away": "MEM",
+      "away_score": 110,
+      "complete": true,
+      "date": "2026-10-26",
+      "home": "UTA",
+      "home_score": 105,
+      "id": "0022600126",
+      "names": [
+        "Memphis",
+        "Grizzlies",
+        "Utah",
+        "Jazz"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 169
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600126",
+      "sha256": "dbb2af6328977c48080c8371c72bacc6ec8e2fa7b1bb3499360176b7f683974b"
+    },
+    {
+      "away": "ATL",
+      "away_score": 110,
+      "complete": true,
+      "date": "2026-10-26",
+      "home": "HOU",
+      "home_score": 120,
+      "id": "0022600125",
+      "names": [
+        "Atlanta",
+        "Hawks",
+        "Houston",
+        "Rockets"
+      ],
+      "shot_tracking": {
+        "fga": 179,
+        "tracked": 172
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600125",
+      "sha256": "319e957987b73a96ddb38b2af0aaf41c6ac0b22f2219f0b3c6a2d9c2448c8ad3"
+    },
+    {
+      "away": "PHX",
+      "away_score": 114,
+      "complete": true,
+      "date": "2026-10-26",
+      "home": "OKC",
+      "home_score": 125,
+      "id": "0022600124",
+      "names": [
+        "Phoenix",
+        "Suns",
+        "Oklahoma City",
+        "Thunder"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 167
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600124",
+      "sha256": "12a37454e8c5ec8908d5692a2e20990ef3848aa54cdcb2a6e156ca4f4956b352"
+    },
+    {
+      "away": "IND",
+      "away_score": 102,
+      "complete": true,
+      "date": "2026-10-26",
+      "home": "MIL",
+      "home_score": 110,
+      "id": "0022600123",
+      "names": [
+        "Indiana",
+        "Pacers",
+        "Milwaukee",
+        "Bucks"
+      ],
+      "shot_tracking": {
+        "fga": 191,
+        "tracked": 177
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600123",
+      "sha256": "95e645fd56181808ccaa3978e83fad8611f39821b717fc47d1136bc847aa791a"
+    },
+    {
+      "away": "DAL",
+      "away_score": 113,
+      "complete": true,
+      "date": "2026-10-26",
+      "home": "MIA",
+      "home_score": 109,
+      "id": "0022600122",
+      "names": [
+        "Dallas",
+        "Mavericks",
+        "Miami",
+        "Heat"
+      ],
+      "shot_tracking": {
+        "fga": 186,
+        "tracked": 155
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600122",
+      "sha256": "cf66ea92d386a4e2957eb735cf2d54b5e02c8e63a7f6b5b48c940c8ac6ec8773"
+    },
+    {
+      "away": "CHI",
+      "away_score": 99,
+      "complete": true,
+      "date": "2026-10-26",
+      "home": "BOS",
+      "home_score": 134,
+      "id": "0022600121",
+      "names": [
+        "Chicago",
+        "Bulls",
+        "Boston",
+        "Celtics"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 169
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600121",
+      "sha256": "724f074b57fa31a62a71e1d4570fcb4b4631a1d93c771783cf0d3deeaa1c19d7"
+    },
+    {
+      "away": "MIN",
+      "away_score": 125,
+      "complete": true,
+      "date": "2026-10-26",
+      "home": "CLE",
+      "home_score": 127,
+      "id": "0022600120",
+      "names": [
+        "Minnesota",
+        "Timberwolves",
+        "Cleveland",
+        "Cavaliers"
+      ],
+      "shot_tracking": {
+        "fga": 204,
+        "tracked": 185
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600120",
+      "sha256": "30008a7560254906b2d608371a1d19e599be2b58b7b0f3ae03c926e73c90f051"
+    },
+    {
+      "away": "WAS",
+      "away_score": 103,
+      "complete": true,
+      "date": "2026-10-26",
+      "home": "CHA",
+      "home_score": 110,
+      "id": "0022600119",
+      "names": [
+        "Washington",
+        "Wizards",
+        "Charlotte",
+        "Hornets"
+      ],
+      "shot_tracking": {
+        "fga": 182,
+        "tracked": 172
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600119",
+      "sha256": "a906fc930040695c06f13ecb2795082bc6307ac8dd1d7c1ee844d43559063ec3"
+    },
+    {
+      "away": "MEM",
+      "away_score": 123,
+      "complete": true,
+      "date": "2026-10-25",
+      "home": "SAC",
+      "home_score": 112,
+      "id": "0022600118",
+      "names": [
+        "Memphis",
+        "Grizzlies",
+        "Sacramento",
+        "Kings"
+      ],
+      "shot_tracking": {
+        "fga": 189,
+        "tracked": 174
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600118",
+      "sha256": "d2ea93c979ebdbdce7429b3d56dbe32c3db6db453a52743b26798c858868d366"
+    },
+    {
+      "away": "DET",
+      "away_score": 106,
+      "complete": true,
+      "date": "2026-10-25",
+      "home": "PHI",
+      "home_score": 93,
+      "id": "0022600117",
+      "names": [
+        "Detroit",
+        "Pistons",
+        "Philadelphia",
+        "76ers"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 171
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600117",
+      "sha256": "559c6c18a696640f1f66cb6f1cffad0542b684e1b1e3a353fe221fe8fa5bb1c0"
+    },
+    {
+      "away": "LAC",
+      "away_score": 101,
+      "complete": true,
+      "date": "2026-10-25",
+      "home": "OKC",
+      "home_score": 108,
+      "id": "0022600116",
+      "names": [
+        "LA",
+        "Clippers",
+        "Oklahoma City",
+        "Thunder"
+      ],
+      "shot_tracking": {
+        "fga": 175,
+        "tracked": 163
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600116",
+      "sha256": "8a8a7e11267e0324625a9d13d355cfe6aa4703a6f7a12953835b57367c2a55ab"
+    },
+    {
+      "away": "TOR",
+      "away_score": 94,
+      "complete": true,
+      "date": "2026-10-25",
+      "home": "MIN",
+      "home_score": 117,
+      "id": "0022600115",
+      "names": [
+        "Toronto",
+        "Raptors",
+        "Minnesota",
+        "Timberwolves"
+      ],
+      "shot_tracking": {
+        "fga": 168,
+        "tracked": 160
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600115",
+      "sha256": "95362625f164f2675650e3c3fb3266a52269982ebbb4c48014544ac2bb452d76"
+    },
+    {
+      "away": "ORL",
+      "away_score": 111,
+      "complete": true,
+      "date": "2026-10-25",
+      "home": "NYK",
+      "home_score": 102,
+      "id": "0022600114",
+      "names": [
+        "Orlando",
+        "Magic",
+        "New York",
+        "Knicks"
+      ],
+      "shot_tracking": {
+        "fga": 181,
+        "tracked": 172
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600114",
+      "sha256": "4d77759bb7b0231a29c9bc44b013f70ffbd4a8e48f16a6a5c97589ebdf5f023b"
+    },
+    {
+      "away": "IND",
+      "away_score": 136,
+      "complete": true,
+      "date": "2026-10-25",
+      "home": "BKN",
+      "home_score": 109,
+      "id": "0022600113",
+      "names": [
+        "Indiana",
+        "Pacers",
+        "Brooklyn",
+        "Nets"
+      ],
+      "shot_tracking": {
+        "fga": 171,
+        "tracked": 166
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600113",
+      "sha256": "39f70222158faf15a6416a995cacb2a9042b67cd808652103239923101d211c3"
+    },
+    {
+      "away": "LAL",
+      "away_score": 132,
+      "complete": true,
+      "date": "2026-10-25",
+      "home": "UTA",
+      "home_score": 123,
+      "id": "0022600112",
+      "names": [
+        "Los Angeles",
+        "Lakers",
+        "Utah",
+        "Jazz"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 168
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600112",
+      "sha256": "82ebee95033a951348227a6bbff64731b5b8ba9c3f6ff9ff5b2bbe1bd5969504"
+    },
+    {
+      "away": "GSW",
+      "away_score": 122,
+      "complete": false,
+      "date": "2026-10-24",
+      "home": "PHX",
+      "home_score": 131,
+      "id": "0022600111",
+      "names": [
+        "Golden State",
+        "Warriors",
+        "Phoenix",
+        "Suns"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 88
+      },
+      "tracked_until": "Q2 0:02.0",
+      "tracking_gaps": [
+        {
+          "from": "Q3 11:41",
+          "plays": 210,
+          "to": null
+        }
+      ],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600111",
+      "sha256": "ab9e48b628c66dcd53a47041578fd07683eb8b8359c201b35d373586da5f604d"
+    },
+    {
+      "away": "NOP",
+      "away_score": 135,
+      "complete": true,
+      "date": "2026-10-24",
+      "home": "DEN",
+      "home_score": 141,
+      "id": "0022600110",
+      "names": [
+        "New Orleans",
+        "Pelicans",
+        "Denver",
+        "Nuggets"
+      ],
+      "shot_tracking": {
+        "fga": 198,
+        "tracked": 187
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600110",
+      "sha256": "a3b659521325be87ed6b48ac0d450dcc7f82ef839cdc4d33bb16adcda642e7a7"
+    },
+    {
+      "away": "SAS",
+      "away_score": 122,
+      "complete": true,
+      "date": "2026-10-24",
+      "home": "DAL",
+      "home_score": 106,
+      "id": "0022600109",
+      "names": [
+        "San Antonio",
+        "Spurs",
+        "Dallas",
+        "Mavericks"
+      ],
+      "shot_tracking": {
+        "fga": 189,
+        "tracked": 174
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600109",
+      "sha256": "66d691756871d99abfff73bb06328a39283d755a14cf64f7ca5843131e71ffb0"
+    },
+    {
+      "away": "WAS",
+      "away_score": 124,
+      "complete": true,
+      "date": "2026-10-24",
+      "home": "CHI",
+      "home_score": 120,
+      "id": "0022600108",
+      "names": [
+        "Washington",
+        "Wizards",
+        "Chicago",
+        "Bulls"
+      ],
+      "shot_tracking": {
+        "fga": 187,
+        "tracked": 173
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600108",
+      "sha256": "c8f90cd578ba605dddc3d581059565b835647085ef401bc167f768b3739f6866"
+    },
+    {
+      "away": "HOU",
+      "away_score": 121,
+      "complete": true,
+      "date": "2026-10-24",
+      "home": "ATL",
+      "home_score": 114,
+      "id": "0022600107",
+      "names": [
+        "Houston",
+        "Rockets",
+        "Atlanta",
+        "Hawks"
+      ],
+      "shot_tracking": {
+        "fga": 185,
+        "tracked": 174
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600107",
+      "sha256": "e7f3d145ad27656fb9caaace8e80af0dea2012071b0830e4d2d01724a2393ebb"
+    },
+    {
+      "away": "MIL",
+      "away_score": 116,
+      "complete": true,
+      "date": "2026-10-24",
+      "home": "PHI",
+      "home_score": 127,
+      "id": "0022600106",
+      "names": [
+        "Milwaukee",
+        "Bucks",
+        "Philadelphia",
+        "76ers"
+      ],
+      "shot_tracking": {
+        "fga": 188,
+        "tracked": 172
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600106",
+      "sha256": "bdae290644cf50dbd02bf51671520f55572f108a3b78a7bf5048e722e1c211b7"
+    },
+    {
+      "away": "BKN",
+      "away_score": 121,
+      "complete": true,
+      "date": "2026-10-24",
+      "home": "CLE",
+      "home_score": 125,
+      "id": "0022600105",
+      "names": [
+        "Brooklyn",
+        "Nets",
+        "Cleveland",
+        "Cavaliers"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 164
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600105",
+      "sha256": "73601d509874f4eb27d9b4c61187705748310eedd30778a6f236a4b5b1a0ec57"
+    },
+    {
+      "away": "MIA",
+      "away_score": 110,
+      "complete": true,
+      "date": "2026-10-24",
+      "home": "CHA",
+      "home_score": 115,
+      "id": "0022600104",
+      "names": [
+        "Miami",
+        "Heat",
+        "Charlotte",
+        "Hornets"
+      ],
+      "shot_tracking": {
+        "fga": 174,
+        "tracked": 170
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600104",
+      "sha256": "65088a66cdb780862795bc8c00dc25bae2d6ba13aa714a4c9d2abcdea97ef1ce"
+    },
+    {
+      "away": "POR",
+      "away_score": 128,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "SAC",
+      "home_score": 120,
+      "id": "0022600103",
+      "names": [
+        "Portland",
+        "Trail Blazers",
+        "Sacramento",
+        "Kings"
+      ],
+      "shot_tracking": {
+        "fga": 187,
+        "tracked": 177
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600103",
+      "sha256": "1a96a72c261342ddbeca54f36d06e3908d77367e0940730a8b3d33afc8b0be3d"
+    },
+    {
+      "away": "LAC",
+      "away_score": 117,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "LAL",
+      "home_score": 125,
+      "id": "0022600102",
+      "names": [
+        "LA",
+        "Clippers",
+        "Los Angeles",
+        "Lakers"
+      ],
+      "shot_tracking": {
+        "fga": 162,
+        "tracked": 155
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600102",
+      "sha256": "6ae80438bc6e278519d93fba78a698bddb3ba5bca3d8f82be5521562ea08c8ba"
+    },
+    {
+      "away": "MEM",
+      "away_score": 111,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "GSW",
+      "home_score": 108,
+      "id": "0022600101",
+      "names": [
+        "Memphis",
+        "Grizzlies",
+        "Golden State",
+        "Warriors"
+      ],
+      "shot_tracking": {
+        "fga": 169,
+        "tracked": 159
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600101",
+      "sha256": "97fb8a8595eef91a8194fc46b21ab99c9c5c7bcf976fe1abf981d7aab122a355"
+    },
+    {
+      "away": "NOP",
+      "away_score": 119,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "UTA",
+      "home_score": 120,
+      "id": "0022600100",
+      "names": [
+        "New Orleans",
+        "Pelicans",
+        "Utah",
+        "Jazz"
+      ],
+      "shot_tracking": {
+        "fga": 171,
+        "tracked": 159
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600100",
+      "sha256": "281722ebad0c4fa4334f89288efa3382b50e90afe937b30e9a6bd2d1a496d394"
+    },
+    {
+      "away": "CHI",
+      "away_score": 132,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "MIL",
+      "home_score": 125,
+      "id": "0022600099",
+      "names": [
+        "Chicago",
+        "Bulls",
+        "Milwaukee",
+        "Bucks"
+      ],
+      "shot_tracking": {
+        "fga": 190,
+        "tracked": 179
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600099",
+      "sha256": "229e4efea289d5bf8de94630c25edc04641096c4695a3c555a77a89b19374c26"
+    },
+    {
+      "away": "DET",
+      "away_score": 128,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "MIA",
+      "home_score": 111,
+      "id": "0022600098",
+      "names": [
+        "Detroit",
+        "Pistons",
+        "Miami",
+        "Heat"
+      ],
+      "shot_tracking": {
+        "fga": 191,
+        "tracked": 179
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600098",
+      "sha256": "7b9f07263427c910cf517ea2c30d11a7800933afdcf88778914fa657613e83ab"
+    },
+    {
+      "away": "TOR",
+      "away_score": 112,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "WAS",
+      "home_score": 102,
+      "id": "0022600097",
+      "names": [
+        "Toronto",
+        "Raptors",
+        "Washington",
+        "Wizards"
+      ],
+      "shot_tracking": {
+        "fga": 180,
+        "tracked": 172
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600097",
+      "sha256": "7e5b14d7d3999821e525c678a53f0bc3124c9f802e6189a2f09701d355d7bec5"
+    },
+    {
+      "away": "MIN",
+      "away_score": 115,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "ORL",
+      "home_score": 93,
+      "id": "0022600096",
+      "names": [
+        "Minnesota",
+        "Timberwolves",
+        "Orlando",
+        "Magic"
+      ],
+      "shot_tracking": {
+        "fga": 182,
+        "tracked": 167
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600096",
+      "sha256": "3a482b1826d2f07bf86e17ea558d77d83f328bcedb78887ac8440ba7d54da12f"
+    },
+    {
+      "away": "DAL",
+      "away_score": 121,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "IND",
+      "home_score": 105,
+      "id": "0022600095",
+      "names": [
+        "Dallas",
+        "Mavericks",
+        "Indiana",
+        "Pacers"
+      ],
+      "shot_tracking": {
+        "fga": 176,
+        "tracked": 165
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600095",
+      "sha256": "05979069f6c1d51ddce38818198d1db0ec94d528fa7644cf4896845967a39e01"
+    },
+    {
+      "away": "ATL",
+      "away_score": 128,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "CHA",
+      "home_score": 81,
+      "id": "0022600094",
+      "names": [
+        "Atlanta",
+        "Hawks",
+        "Charlotte",
+        "Hornets"
+      ],
+      "shot_tracking": {
+        "fga": 182,
+        "tracked": 172
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600094",
+      "sha256": "86cc4eb89d6145517b74a6fd08ded1e5acb7fa751e9018050c7bf0a7232925aa"
+    },
+    {
+      "away": "HOU",
+      "away_score": 114,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "SAS",
+      "home_score": 110,
+      "id": "0022600009",
+      "names": [
+        "Houston",
+        "Rockets",
+        "San Antonio",
+        "Spurs"
+      ],
+      "shot_tracking": {
+        "fga": 165,
+        "tracked": 154
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600009",
+      "sha256": "bed407539d9c8eb792a54c7e73f9181316b0690d134ed00e05c61ed6c7142aaf"
+    },
+    {
+      "away": "NYK",
+      "away_score": 103,
+      "complete": true,
+      "date": "2026-10-23",
+      "home": "BOS",
+      "home_score": 107,
+      "id": "0022600008",
+      "names": [
+        "New York",
+        "Knicks",
+        "Boston",
+        "Celtics"
+      ],
+      "shot_tracking": {
+        "fga": 167,
+        "tracked": 158
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600008",
+      "sha256": "8e5a2a9ab8773e0523b5eeb9cb0144db500847571a4334895e35ae6ca54ba355"
+    },
+    {
+      "away": "DEN",
+      "away_score": 84,
+      "complete": true,
+      "date": "2026-10-22",
+      "home": "OKC",
+      "home_score": 96,
+      "id": "0022600007",
+      "names": [
+        "Denver",
+        "Nuggets",
+        "Oklahoma City",
+        "Thunder"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 169
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600007",
+      "sha256": "6aa00f746bd2351f72dbb48b8383832a1dfb01386ccca683841bfa1e54902b83"
+    },
+    {
+      "away": "CLE",
+      "away_score": 106,
+      "complete": false,
+      "date": "2026-10-22",
+      "home": "PHI",
+      "home_score": 114,
+      "id": "0022600006",
+      "names": [
+        "Cleveland",
+        "Cavaliers",
+        "Philadelphia",
+        "76ers"
+      ],
+      "shot_tracking": {
+        "fga": 179,
+        "tracked": 0
+      },
+      "tracked_until": "Q2 2:51",
+      "tracking_gaps": [
+        {
+          "from": "Q2 2:39",
+          "plays": 259,
+          "to": null
+        }
+      ],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600006",
+      "sha256": "353f8bec043bbe656405066d9a221ec229bbec13cc8b39bc5bb8530a147558fd"
+    },
+    {
+      "away": "SAC",
+      "away_score": 96,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "LAC",
+      "home_score": 121,
+      "id": "0022600093",
+      "names": [
+        "Sacramento",
+        "Kings",
+        "LA",
+        "Clippers"
+      ],
+      "shot_tracking": {
+        "fga": 167,
+        "tracked": 156
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600093",
+      "sha256": "3e3f00d319158c9a8e27ee2304ec2d68361ca2fe163001bdb34603c5501c96be"
+    },
+    {
+      "away": "PHX",
+      "away_score": 83,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "POR",
+      "home_score": 124,
+      "id": "0022600092",
+      "names": [
+        "Phoenix",
+        "Suns",
+        "Portland",
+        "Trail Blazers"
+      ],
+      "shot_tracking": {
+        "fga": 178,
+        "tracked": 160
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600092",
+      "sha256": "e1ce65c3adeb3f74832240f80d0b90f295c3cbd10461e0c9fa863df98f24f7ca"
+    },
+    {
+      "away": "DAL",
+      "away_score": 110,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "HOU",
+      "home_score": 128,
+      "id": "0022600091",
+      "names": [
+        "Dallas",
+        "Mavericks",
+        "Houston",
+        "Rockets"
+      ],
+      "shot_tracking": {
+        "fga": 167,
+        "tracked": 161
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600091",
+      "sha256": "857fb0e84566d5b1b08a388d8dd2a97d290bae615eab7d04218211deefb7b6e9"
+    },
+    {
+      "away": "IND",
+      "away_score": 123,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "NOP",
+      "home_score": 120,
+      "id": "0022600090",
+      "names": [
+        "Indiana",
+        "Pacers",
+        "New Orleans",
+        "Pelicans"
+      ],
+      "shot_tracking": {
+        "fga": 179,
+        "tracked": 164
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600090",
+      "sha256": "dac330ff778e3bd1915f369f0378ec9a559c5ef7fec933331d980ea46d045c85"
+    },
+    {
+      "away": "UTA",
+      "away_score": 103,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "MEM",
+      "home_score": 123,
+      "id": "0022600089",
+      "names": [
+        "Utah",
+        "Jazz",
+        "Memphis",
+        "Grizzlies"
+      ],
+      "shot_tracking": {
+        "fga": 169,
+        "tracked": 162
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600089",
+      "sha256": "7c995de96cdf3294e62b263fc31933f91f54c71d055b1548357910993cf7240f"
+    },
+    {
+      "away": "CHI",
+      "away_score": 92,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "TOR",
+      "home_score": 135,
+      "id": "0022600088",
+      "names": [
+        "Chicago",
+        "Bulls",
+        "Toronto",
+        "Raptors"
+      ],
+      "shot_tracking": {
+        "fga": 183,
+        "tracked": 173
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600088",
+      "sha256": "29d5491a52e739277b5b6c108ff7b7828223f2d477dab773c2375d8164ade65b"
+    },
+    {
+      "away": "CHA",
+      "away_score": 110,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "BKN",
+      "home_score": 103,
+      "id": "0022600087",
+      "names": [
+        "Charlotte",
+        "Hornets",
+        "Brooklyn",
+        "Nets"
+      ],
+      "shot_tracking": {
+        "fga": 173,
+        "tracked": 162
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600087",
+      "sha256": "ed5119a891eead048e45a726b43b87408421714cbed52539a0260bcf8ea4f3f5"
+    },
+    {
+      "away": "MIL",
+      "away_score": 116,
+      "complete": false,
+      "date": "2026-10-21",
+      "home": "WAS",
+      "home_score": 128,
+      "id": "0022600086",
+      "names": [
+        "Milwaukee",
+        "Bucks",
+        "Washington",
+        "Wizards"
+      ],
+      "shot_tracking": {
+        "fga": 177,
+        "tracked": 162
+      },
+      "tracked_until": "Q3 1:46",
+      "tracking_gaps": [
+        {
+          "from": "Q3 1:46",
+          "plays": 123,
+          "to": null
+        }
+      ],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600086",
+      "sha256": "a4ef3b6acb487423dc1b622b4707dae146f7f77713914ac331ff819d1d213a0c"
+    },
+    {
+      "away": "ATL",
+      "away_score": 132,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "ORL",
+      "home_score": 125,
+      "id": "0022600085",
+      "names": [
+        "Atlanta",
+        "Hawks",
+        "Orlando",
+        "Magic"
+      ],
+      "shot_tracking": {
+        "fga": 175,
+        "tracked": 166
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600085",
+      "sha256": "b6eeaee1a68a035e66f52cae615c514555b5e9046db9982865b095aa3bcd41e4"
+    },
+    {
+      "away": "GSW",
+      "away_score": 105,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "LAL",
+      "home_score": 127,
+      "id": "0022600005",
+      "names": [
+        "Golden State",
+        "Warriors",
+        "Los Angeles",
+        "Lakers"
+      ],
+      "shot_tracking": {
+        "fga": 173,
+        "tracked": 160
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600005",
+      "sha256": "5fbce932bc0bd12748d72f45f2074e3bbe60701e17a10e19f197e5a3bc6c1278"
+    },
+    {
+      "away": "MIN",
+      "away_score": 131,
+      "complete": true,
+      "date": "2026-10-21",
+      "home": "MIA",
+      "home_score": 106,
+      "id": "0022600004",
+      "names": [
+        "Minnesota",
+        "Timberwolves",
+        "Miami",
+        "Heat"
+      ],
+      "shot_tracking": {
+        "fga": 179,
+        "tracked": 145
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600004",
+      "sha256": "c9557d70c77235b6c2c33f4645ff3e59bd4906fb818d7e09a99d3ed42055bf6f"
+    },
+    {
+      "away": "OKC",
+      "away_score": 116,
+      "complete": true,
+      "date": "2026-10-20",
+      "home": "SAS",
+      "home_score": 104,
+      "id": "0022600003",
+      "names": [
+        "Oklahoma City",
+        "Thunder",
+        "San Antonio",
+        "Spurs"
+      ],
+      "shot_tracking": {
+        "fga": 188,
+        "tracked": 178
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600003",
+      "sha256": "c8696db7141be447390b74e5f1e97b97b14192ce4f6495a8426f68ce5d6e0b82"
+    },
+    {
+      "away": "PHI",
+      "away_score": 106,
+      "complete": true,
+      "date": "2026-10-20",
+      "home": "NYK",
+      "home_score": 100,
+      "id": "0022600002",
+      "names": [
+        "Philadelphia",
+        "76ers",
+        "New York",
+        "Knicks"
+      ],
+      "shot_tracking": {
+        "fga": 183,
+        "tracked": 174
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600002",
+      "sha256": "c2f34dad3d2a15441c5b31c0f0ad26a7d265d5a50cec953a35a96be8b01742e1"
+    },
+    {
+      "away": "BOS",
+      "away_score": 113,
+      "complete": true,
+      "date": "2026-10-20",
+      "home": "DET",
+      "home_score": 121,
+      "id": "0022600001",
+      "names": [
+        "Boston",
+        "Celtics",
+        "Detroit",
+        "Pistons"
+      ],
+      "shot_tracking": {
+        "fga": 174,
+        "tracked": 165
+      },
+      "tracked_until": null,
+      "tracking_gaps": [],
+      "retrieved_at_utc": "2026-11-07T04:40:26.130809+00:00",
+      "source_url": "https://courtsketch.com/api/tracking/game/0022600001",
+      "sha256": "b44364e9121154efc4d28d01dc7382d67057e95b9f9c6e7850f4e0c8e8ce7f4f"
+    }
+  ],
+  "label_quality": "Experimental provider detections, not possession-tagged ground truth",
+  "forecast_weight": 0.0
+}

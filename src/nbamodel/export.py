@@ -18,6 +18,7 @@ from . import (
     authority,
     availability,
     context,
+    dynamics_model,
     features,
     ingest,
     live,
@@ -39,6 +40,8 @@ PUBLIC_FORBIDDEN = {
     "edge_withheld_reason", "win_probability", "projected_away_score", "projected_home_score",
     "projected_total", "may_bet", "authority", "book", "action", "rating", "net_rating_model",
     "lean", "pick", "availability_margin",
+    "model_diagnostics", "model_analysis", "shooting_reversion", "shooting_scenario",
+    "tracking_tactics", "net_reversion_pp100", "regression_pressure_pp100", "progression_pressure_pp100",
 }
 
 
@@ -183,6 +186,8 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
 
     board_games: list[dict[str, Any]] = []
     public_games: list[dict[str, Any]] = []
+    model_analysis = dynamics_model.build(season, as_of.isoformat())
+    diagnostic_teams = model_analysis["seasons"][str(season)]
     for f in fixtures:
         hb = int(_played_yesterday(games, f.home, f.tip_utc))
         ab = int(_played_yesterday(games, f.away, f.tip_utc))
@@ -247,6 +252,9 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             "book": book or None,
             "home_moneyline": book.get("home_moneyline"), "away_moneyline": book.get("away_moneyline"),
             "action": "MONITOR", "authority": authority.LEVEL,
+            "model_diagnostics": dynamics_model.forecast_diagnostics(
+                diagnostic_teams.get(f.away, {}), diagnostic_teams.get(f.home, {}),
+                {"away_points": away_pts, "home_points": home_pts}),
         })
         public = {
             "id": f.event_id, "sport": "nba", "season": season, "game_state": f.state,
@@ -332,7 +340,8 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
                   "cached_games": len(games), "injuries": len(injury_rows), "model_version": MODEL_VERSION,
                   "notes": notes}
     out.mkdir(parents=True, exist_ok=True)
-    for name, payload in (("board.json", board), ("slate.json", public_slate), ("build.json", build_info)):
+    for name, payload in (("board.json", board), ("slate.json", public_slate), ("build.json", build_info),
+                          ("model_analysis.json", model_analysis)):
         (out / name).write_text(json.dumps(payload, indent=1, default=str) + "\n", encoding="utf-8")
     from . import evidence
     evidence.write(out, season)
