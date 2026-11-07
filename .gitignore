@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 _site/
 _smoke/
+_evidence/
 *.tmp
 .pytest_cache/
 .ruff_cache/

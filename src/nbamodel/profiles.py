@@ -191,7 +191,9 @@ def play_types(t: Tables) -> dict[str, dict]:
             pr = ranked(ppp, f"{label} Points Per Possession" + ("" if side == "offense" else " Allowed"),
                         "high" if side == "offense" else "low", "num2")
             for team in freq:
-                out[team][side][pt] = {"label": label, "freq": fr.get(team), "ppp": pr.get(team)}
+                sample = next(r for r in rows if t.team(r) == team)
+                out[team][side][pt] = {"label": label, "freq": fr.get(team), "ppp": pr.get(team),
+                                      "possessions_per_game": _f(sample.get("POSS")), "games": sample.get("GP")}
     return dict(out)
 
 
@@ -490,10 +492,11 @@ def career_threes(season: int, seasons_back: int = 4) -> dict[str, tuple[int, in
 
 
 def build_all(season: int, form: dict[str, dict], rotations: dict[str, list[dict]],
-              injuries: dict[str, dict[str, str]], espn_coaches: tuple[dict, dict] | None = None
+              injuries: dict[str, dict[str, str]], espn_coaches: tuple[dict, dict] | None = None,
+              *, exact_season: bool = False
               ) -> tuple[dict[str, dict], dict[str, Any]]:
     """(team -> profile, provenance). ``form`` is features.team_form for the basis season."""
-    t = basis_tables(season)
+    t = Tables(season) if exact_season else basis_tables(season)
     t_prev = Tables(t.season - 1)
     shots = shot_profile(t)
     pts = play_types(t)
@@ -519,7 +522,7 @@ def build_all(season: int, form: dict[str, dict], rotations: dict[str, list[dict
         scheme_reads = schemes.reads(t.season)
     except Exception:
         scheme_reads = {}
-    reg_season = season if ingest.load_games(season) and max(
+    reg_season = season if exact_season or ingest.load_games(season) and max(
         (r.get("games", 0) for r in regression(ingest.load_games(season)).values()), default=0) >= MIN_GAMES \
         else season - 1
     reg = regression(ingest.load_games(reg_season))
@@ -528,7 +531,7 @@ def build_all(season: int, form: dict[str, dict], rotations: dict[str, list[dict
     # Shot zones and on-floor defense come from ESPN play-by-play, which every
     # build refreshes: this season's once clubs have played MIN_GAMES, else
     # last season's. stats.nba.com zones stand in only when ESPN has none.
-    zone_season = season if espn_games_played(season) >= MIN_GAMES else season - 1
+    zone_season = season if exact_season or espn_games_played(season) >= MIN_GAMES else season - 1
     espn_zones = espn_team_zones(zone_season)
     espn_pzones = espn_player_zones(zone_season)
     onfloor = espn_onfloor_defense(zone_season)
@@ -602,7 +605,9 @@ def espn_team_zones(season: int) -> dict[str, dict]:
             s_r = ranked(share, f"{label} Share Of Shots{who}", "neutral", "pct")
             p_r = ranked(pct, f"{label} FG%{who}", "high" if side == "offense" else "low", "pct")
             for team in tally:
-                out[team].setdefault(side, {})[key] = {"label": label, "share": s_r.get(team), "fg": p_r.get(team)}
+                attempts, made = tally[team][side][key]
+                out[team].setdefault(side, {})[key] = {"label": label, "share": s_r.get(team), "fg": p_r.get(team),
+                                                     "attempts": attempts, "made": made}
     return dict(out)
 
 

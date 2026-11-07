@@ -177,6 +177,6 @@ def reads(season: int) -> dict[str, dict[str, Any]]:
         under = coaches.head_coach(team, season)
         out[team] = {"basis": f"{season - 1}-{str(season)[2:]} Season", "indices": idx, "reads": found,
                      "measured_under": (under or {}).get("coach"),
-                     "not_measured": "Zone frequency: the league does not publish zone possessions, and the "
-                                     "public statistical trace of zone failed a check against known zone teams."}
+                     "not_measured": "Named coverages and formations are inferred here, not possession-tagged. "
+                                     "Measured zone/non-zone splits are published separately in matchup evidence."}
     return out

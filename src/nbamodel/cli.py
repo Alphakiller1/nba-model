@@ -11,7 +11,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import authority, bbref, bulk, export, ingest, ledger, nbastats, site
+from . import authority, bbref, bulk, coverage, databallr, export, ingest, ledger, nbastats, site
 
 
 def _refresh(args: argparse.Namespace) -> int:
@@ -39,6 +39,12 @@ def _refresh(args: argparse.Namespace) -> int:
     stale = not fetched or (datetime.now(timezone.utc) - datetime.fromisoformat(fetched)).total_seconds() > 6 * 3600
     if stale:
         nbastats.refresh(season)
+    for year in (season - 1, season):
+        for name, refresh in (("Databallr", databallr.refresh), ("NBA coverage", coverage.refresh)):
+            try:
+                print(name, year, refresh(year))
+            except Exception as exc:
+                print(f"{name} {year}: {type(exc).__name__}; retaining the dated last snapshot")
     return 0
 
 
