@@ -35,6 +35,11 @@ Refresh runs with the normal scheduled model build, with six-hour source caches.
 Validation checks season, competition, all 30 clubs, counts, reconciliation and
 coverage regressions before replacing a snapshot. A refused fetch retains the
 dated previous snapshot. Receipt hashes are checked when reading Databallr.
+When the NBA endpoint trails the paired public tables, the dated capture
+supplies current measured coverage. It must reconcile across both directions.
+Each printed share must resolve to a single possession count, and PPP keeps
+the two decimals the league publishes. The endpoint takes over once both
+directions reach the captured game counts for every team.
 Snapshots collected today cannot enter a backtest with an earlier `as_of`.
 
 ## What remains unavailable for free
