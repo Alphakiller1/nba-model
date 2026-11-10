@@ -54,6 +54,18 @@ def test_coverage_direction_and_thin_samples_are_preserved():
                         assert row["ppp"] is None
 
 
+def test_public_nba_table_recovers_counts_and_preserves_source_precision(monkeypatch):
+    monkeypatch.setattr(coverage, "load", lambda season, side: {})
+    context = coverage.team_contexts(2027)
+    assert sum(t["offense"]["games"] for t in context.values()) == 292
+    assert sum(t["defense"]["possessions"] for t in context.values()) == 27068
+    hawks = context["ATL"]["defense"]
+    assert hawks["ppp_decimals"] == 2
+    assert [r["possessions"] for r in hawks["rows"]] == [5, 1034]
+    assert [r["ppp"] for r in hawks["rows"]] == [1.0, 0.77]
+    assert hawks["rows"][0]["ppp_grade"] is None
+
+
 def test_databallr_zone_schema_keeps_counts_and_provider_names():
     team = next(iter(databallr.team_contexts(2027).values()))
     assert team["schema"] == "databallr-pbp-zones-v1"
