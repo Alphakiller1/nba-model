@@ -21,7 +21,9 @@ from . import (
     dynamics_model,
     features,
     ingest,
+    injury_value,
     live,
+    official_report,
     player_board,
     player_props,
     profiles,
@@ -130,6 +132,17 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
     except Exception as exc:  # no roster shift and no availability term tonight
         roster = {}
         issues.append(f"rosters unavailable: {type(exc).__name__}")
+    # The league's official report: the exact designation (Out, Doubtful,
+    # Questionable, Probable) ESPN folds into "Day-To-Day". Public lists only;
+    # the model's pool still reads ESPN's feed, as its record was measured on.
+    official_url, official = None, {}
+    try:
+        official_url, official_rows = official_report.latest(now)
+        official = official_report.by_player(official_rows, roster) if roster else {}
+        if not official_url:
+            notes.append("official injury report not published yet today")
+    except Exception as exc:  # ESPN's statuses still stand
+        notes.append(f"official injury report unavailable: {type(exc).__name__}")
 
     games = ingest.load_games(season)
     prev_games = ingest.load_games(season - 1)
@@ -152,6 +165,14 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
         pm = None
         issues.append(f"player model unavailable: {type(exc).__name__}: {exc}")
     sig_record = signals.record()
+    try:
+        value_coef = injury_value.coefficients()
+        production = injury_value.Production(
+            ingest.load_players(season), ingest.load_players(season - 1),
+            {g.event_id: i for i, g in enumerate(sorted(games, key=lambda g: g.date_utc))})
+    except Exception as exc:  # the injury lists still ship, without values
+        value_coef, production = None, None
+        notes.append(f"player values unavailable: {type(exc).__name__}")
 
     form_now = features.team_form(games, season)
     form_prev = features.team_form(prev_games, season - 1)
@@ -278,10 +299,14 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             public[f"{side}_players_prior"] = (lines_prev.get(team) or [])[:12]
             public[f"{side}_profile"] = team_profiles.get(team)
             public[f"{side}_schedule"] = schedule_load(games or prev_games, team, f.home, f.tip_utc)
-            public[f"{side}_injuries"] = [
-                {"player_id": i.player_id, "player_name": i.name, "status": i.status,
-                 "detail": i.detail, "comment": i.note, "date": i.date, "return_date": i.return_date}
-                for i in injury_rows if i.team == team]
+            values = _player_values(production, roster.get(team, {}),
+                                    {i.player_id for i in injury_rows if i.team == team and i.player_id}
+                                    | set(official.get(team, {})), value_coef)
+            public[f"{side}_player_values"] = [
+                {"player_id": pid, "player_name": roster.get(team, {}).get(pid, ""), "value": v}
+                for pid, v in sorted(values.items(), key=lambda kv: -kv[1]) if abs(v) >= 0.05]
+            public[f"{side}_injuries"] = _public_injuries(team, injury_rows, official.get(team, {}),
+                                                          roster.get(team, {}), values)
         public_games.append(public)
 
     # Player props from tonight's rotations (player_props.py); the game board
@@ -331,7 +356,9 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
     }
     public_slate = {"schema": PUBLIC_SLATE_SCHEMA, "sport": "nba", "season": season, "slate_date": slate_date,
                     "generated_at_utc": generated, "data_through_utc": max((g.date_utc for g in games), default=None),
-                    "profile_sources": profile_prov, "games": public_games}
+                    "profile_sources": profile_prov, "games": public_games,
+                    "official_injury_report": official_url,
+                    "designation_play_rates": designation_rates()}
     leaked = forbidden_keys(public_slate)
     if leaked:
         raise ValueError(f"public slate carries model fields: {sorted(leaked)}")
@@ -349,6 +376,58 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
 
 
 EARLY_GAMES = 3
+
+
+def designation_rates() -> dict[str, Any] | None:
+    """How often a player listed with each designation played
+    (scripts/designation_rates.py: official reports joined to box scores)."""
+    path = authority.DATA / "designation_rates.json"
+    if not path.exists():
+        return None
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return {"by_status": data.get("by_status"), "by_status_reason": data.get("by_status_reason"),
+            "seasons": data.get("seasons"), "method": data.get("method")}
+
+
+def _player_values(production: Any, people: dict[str, str], listed: set[str],
+                   coef: dict[str, float] | None) -> dict[str, float]:
+    """{player_id: points of the spread the club gives up without him}
+    (injury_value.py) for his club's top thirteen by minutes and everyone on
+    an injury report."""
+    if production is None or not coef or not people:
+        return {}
+    known = {pid: production.of(pid) for pid in people}
+    known = {pid: v for pid, v in known.items() if v}
+    top = set(sorted(known, key=lambda pid: -known[pid][0])[:13])
+    return {pid: round(injury_value.value(*known[pid], coef), 2) for pid in (top | listed) if pid in known}
+
+
+def _public_injuries(team: str, rows: list, official: dict, people: dict[str, str],
+                     values: dict[str, float]) -> list[dict[str, Any]]:
+    """ESPN's list with each player's official designation laid over it, plus
+    the officially listed players ESPN does not carry. "Available" is not a
+    designation and is left off; every row carries the player's value."""
+    out, seen = [], set()
+    for i in rows:
+        if i.team != team:
+            continue
+        o = official.get(i.player_id)
+        seen.add(i.player_id)
+        if o is not None and o.status == "Available":
+            continue
+        out.append({"player_id": i.player_id, "player_name": i.name,
+                    "status": o.status if o else i.status, "source": "official" if o else "espn",
+                    "reason": o.reason if o else None, "detail": i.detail, "comment": i.note,
+                    "date": i.date, "return_date": i.return_date, "value": values.get(i.player_id)})
+    for pid, o in official.items():
+        if pid in seen or o.status == "Available":
+            continue
+        out.append({"player_id": pid, "player_name": people.get(pid, o.name), "status": o.status,
+                    "source": "official", "reason": o.reason, "detail": None, "comment": None,
+                    "date": None, "return_date": None, "value": values.get(pid)})
+    order = {"Out": 0, "Doubtful": 1, "Questionable": 2, "Day-To-Day": 3, "Probable": 4}
+    out.sort(key=lambda r: (order.get(r["status"], 5), -(r["value"] or 0)))
+    return out
 
 
 def playing_teams(fixtures) -> list[str]:
