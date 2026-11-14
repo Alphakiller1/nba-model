@@ -8,7 +8,7 @@ version = "0.2.0"
 description = "NBA player-impact model (Bayesian RAPM on lineup stints) with early-line signals and an authority gate"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["numpy>=1.26", "scipy>=1.11", "tzdata; sys_platform == 'win32'"]
+dependencies = ["numpy>=1.26", "scipy>=1.11", "pypdf>=4.0", "requests>=2.31", "tzdata; sys_platform == 'win32'"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "ruff==0.15.20"]
