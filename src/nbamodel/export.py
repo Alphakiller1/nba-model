@@ -307,6 +307,7 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
                 for pid, v in sorted(values.items(), key=lambda kv: -kv[1]) if abs(v) >= 0.05]
             public[f"{side}_injuries"] = _public_injuries(team, injury_rows, official.get(team, {}),
                                                           roster.get(team, {}), values)
+            _attach_recent(public[f"{side}_injuries"], team, production, value_coef)
         public_games.append(public)
 
     # Player props from tonight's rotations (player_props.py); the game board
@@ -400,6 +401,24 @@ def _player_values(production: Any, people: dict[str, str], listed: set[str],
     known = {pid: v for pid, v in known.items() if v}
     top = set(sorted(known, key=lambda pid: -known[pid][0])[:13])
     return {pid: round(injury_value.value(*known[pid], coef), 2) for pid in (top | listed) if pid in known}
+
+
+def _attach_recent(entries: list[dict[str, Any]], team: str, production: Any,
+                   coef: dict[str, float] | None) -> None:
+    """Each valued entry's value_recent - what the closing-line fit counted
+    for him sitting, which fades out over a long absence (Production.recent)
+    - and his club's games in a row without him. Before a club has played
+    three games there is no window yet, and the value stands."""
+    if production is None or not coef:
+        return
+    early = len(production.club_games.get(team, [])) < 3
+    for entry in entries:
+        if entry.get("value") is None:
+            continue
+        line, missed = production.recent(entry["player_id"], team)
+        entry["value_recent"] = (round(injury_value.value(*line, coef), 2) if line
+                                 else entry["value"] if early else 0.0)
+        entry["missed"] = missed
 
 
 def _public_injuries(team: str, rows: list, official: dict, people: dict[str, str],
