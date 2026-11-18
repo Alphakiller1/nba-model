@@ -61,3 +61,24 @@ def test_lineup_fetch_stops_after_two_clubs_in_a_row_fail():
     out = lineups.fetch_lineups(2027, ["ATL", "BOS", "CHI", "DAL"], fetch=fetch)
     assert out == {}
     assert len(asked) == 4          # ATL and BOS, two tries each; CHI and DAL never asked
+
+
+def test_units_from_our_own_stints():
+    games = [SimpleNamespace(event_id="g1", home="NY", away="TOR"),
+             SimpleNamespace(event_id="g2", home="TOR", away="NY")]
+    five = "1|2|3|4|5"
+    other = "6|7|8|9|10"
+
+    def stint(event, home, away, hp, ap, secs):
+        return {"event_id": event, "home_players": home, "away_players": away, "home_pts": hp, "away_pts": ap,
+                "home_fga": 20, "away_fga": 20, "home_fta": 0, "away_fta": 0, "home_oreb": 0, "away_oreb": 0,
+                "home_tov": 0, "away_tov": 0, "seconds": secs}
+    stints = [stint("g1", five, other, 30, 20, 600), stint("g2", other, five, 22, 28, 600),
+              stint("g1", "1|2|3|4", other, 2, 0, 60)]      # the four-man side is skipped, the five counts
+    players = [{"athlete_id": str(i), "name": f"Player {i}"} for i in range(1, 11)]
+    out = lineups.units_from_stints(stints, games, players)
+    ny = out["NY"][0]
+    assert ny["players"] == ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    assert ny["minutes"] == 20.0
+    assert (ny["off_rating"], ny["def_rating"], ny["net_rating"]) == (145.0, 105.0, 40.0)
+    assert out["TOR"][0]["net_rating"] == -30.0   # 42 for, 60 against over 60 possessions
