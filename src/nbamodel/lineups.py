@@ -1,8 +1,9 @@
 """Five-man units and situational splits for the public NBA desk (2026-11-18 audit).
 
-Lineups: pbpstats.com's free lineup totals (one request per club, honest
-client name, paced): each club's most-used five-man units with minutes and
-points per 100 possessions on offence and defence, and the net of the two.
+Lineups: each club's most-used five-man units, summed from this repo's own
+play-by-play stints (units_from_stints), with minutes and points per 100
+possessions on offence and defence, and the net of the two. pbpstats.com
+fills only a club the stints do not cover.
 
 Splits: from the games this repo already ingests, each club's net points per
 100 possessions at home and on the road, on the second night of a
@@ -110,6 +111,48 @@ def fetch_lineups(season: int, clubs: Iterable[str], fetch=_fetch, pause: float 
 
 def _poss(fga: float, oreb: float, tov: float, fta: float) -> float:
     return fga - oreb + tov + 0.44 * fta
+
+
+def units_from_stints(stints: Iterable[dict], games: Iterable[Any], players: Iterable[dict]) -> dict[str, list[dict]]:
+    """{club: [unit, ...]} from this repo's own play-by-play stints
+    (bulk.load_stints): every stretch a five was on the floor, summed. No
+    third-party call, so the units cannot go missing with pbpstats (which
+    stopped answering on 2026-11-18); the figures match its definitions
+    (points per 100 possessions both ways, FGA - OREB + TOV + 0.44 FTA)."""
+    side_of = {str(g.event_id): (g.home, g.away) for g in games}
+    names = {str(r.get("athlete_id")): r.get("name") for r in players if r.get("athlete_id")}
+    acc: dict[tuple[str, tuple[str, ...]], list[float]] = defaultdict(lambda: [0.0] * 5)
+
+    def num(row, key):
+        try:
+            return float(row.get(key) or 0)
+        except (TypeError, ValueError):
+            return 0.0
+    for r in stints:
+        teams = side_of.get(str(r.get("event_id")))
+        if not teams:
+            continue
+        for side, other, club in (("home", "away", teams[0]), ("away", "home", teams[1])):
+            five = tuple(sorted(p for p in str(r.get(f"{side}_players") or "").split("|") if p))
+            if len(five) != 5:
+                continue
+            a = acc[(club, five)]
+            a[0] += num(r, "seconds")
+            a[1] += num(r, f"{side}_pts")
+            a[2] += num(r, f"{other}_pts")
+            a[3] += _poss(num(r, f"{side}_fga"), num(r, f"{side}_oreb"), num(r, f"{side}_tov"), num(r, f"{side}_fta"))
+            a[4] += _poss(num(r, f"{other}_fga"), num(r, f"{other}_oreb"), num(r, f"{other}_tov"),
+                          num(r, f"{other}_fta"))
+    by_club: dict[str, list[dict]] = defaultdict(list)
+    for (club, five), (secs, pts, opp, poss, opp_poss) in acc.items():
+        minutes = secs / 60
+        if minutes < MIN_UNIT_MINUTES:
+            continue
+        off, de = _per100(pts, poss), _per100(opp, opp_poss)
+        by_club[club].append({"players": [names.get(p) or p for p in five], "minutes": round(minutes, 1),
+                              "off_poss": int(round(poss)), "off_rating": off, "def_rating": de,
+                              "net_rating": round(off - de, 1) if off is not None and de is not None else None})
+    return {club: sorted(units, key=lambda u: -u["minutes"])[:TOP_UNITS] for club, units in by_club.items()}
 
 
 def splits(games: Iterable[Any]) -> dict[str, dict[str, Any]]:

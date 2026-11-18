@@ -17,6 +17,7 @@ from typing import Any
 from . import (
     authority,
     availability,
+    bulk,
     context,
     dynamics_model,
     features,
@@ -149,11 +150,19 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
     prev_games = ingest.load_games(season - 1)
     # Five-man units (pbpstats) for tonight's clubs, and each club's home/road
     # and rest splits (lineups.py, 2026-11-18 audit). Both fail soft.
+    # Units come from this repo's own play-by-play stints; pbpstats fills only
+    # a club the stints do not cover (it stopped answering on 2026-11-18).
     try:
-        club_units = lineups.fetch_lineups(season, playing_teams(fixtures))
+        club_units = lineups.units_from_stints(bulk.load_stints(season), games, ingest.load_players(season))
     except Exception as exc:  # noqa: BLE001
         club_units = {}
-        notes.append(f"lineups unavailable: {type(exc).__name__}")
+        notes.append(f"stint lineups unavailable: {type(exc).__name__}")
+    uncovered = [club for club in playing_teams(fixtures) if club not in club_units]
+    if uncovered:
+        try:
+            club_units.update(lineups.fetch_lineups(season, uncovered))
+        except Exception as exc:  # noqa: BLE001
+            notes.append(f"lineups unavailable: {type(exc).__name__}")
     club_splits = lineups.splits(games)
     first_tip = min((f.tip_utc for f in fixtures), default=now.isoformat())
     as_of = min(now, datetime.fromisoformat(first_tip.replace("Z", "+00:00")))
