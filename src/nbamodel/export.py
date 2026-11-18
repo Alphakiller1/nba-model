@@ -22,6 +22,7 @@ from . import (
     features,
     ingest,
     injury_value,
+    lineups,
     live,
     official_report,
     player_board,
@@ -146,6 +147,14 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
 
     games = ingest.load_games(season)
     prev_games = ingest.load_games(season - 1)
+    # Five-man units (pbpstats) for tonight's clubs, and each club's home/road
+    # and rest splits (lineups.py, 2026-11-18 audit). Both fail soft.
+    try:
+        club_units = lineups.fetch_lineups(season, playing_teams(fixtures))
+    except Exception as exc:  # noqa: BLE001
+        club_units = {}
+        notes.append(f"lineups unavailable: {type(exc).__name__}")
+    club_splits = lineups.splits(games)
     first_tip = min((f.tip_utc for f in fixtures), default=now.isoformat())
     as_of = min(now, datetime.fromisoformat(first_tip.replace("Z", "+00:00")))
     shift = roster_shift(season, roster) if roster else {}
@@ -299,6 +308,8 @@ def build(now: datetime | None = None, *, out: Path) -> dict[str, Any]:
             public[f"{side}_players_prior"] = (lines_prev.get(team) or [])[:12]
             public[f"{side}_profile"] = team_profiles.get(team)
             public[f"{side}_schedule"] = schedule_load(games or prev_games, team, f.home, f.tip_utc)
+            public[f"{side}_lineup_units"] = club_units.get(team)
+            public[f"{side}_splits"] = club_splits.get(team)
             values = _player_values(production, roster.get(team, {}),
                                     {i.player_id for i in injury_rows if i.team == team and i.player_id}
                                     | set(official.get(team, {})), value_coef)
