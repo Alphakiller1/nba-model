@@ -31,7 +31,8 @@ class SnapshotPreferenceTests(unittest.TestCase):
             stats.mkdir(parents=True)
             cover.mkdir(parents=True)
             (stats / "bio.json").write_text(json.dumps({"fetched_at_utc": "2026-11-18T21:40:40+00:00", "v": "new"}))
-            (cover / "offense.json").write_text(json.dumps({"retrieved_at_utc": "2026-11-09T00:00:00+00:00", "v": "old"}))
+            old = {"retrieved_at_utc": "2026-11-09T00:00:00+00:00", "v": "old"}
+            (cover / "offense.json").write_text(json.dumps(old))
             git(root, "add", ".")
             git(root, "-c", "user.name=t", "-c", "user.email=t@example.invalid", "commit", "-qm", "seed")
             # The cache restore: an older table over a newer commit, a newer capture over an older one.
