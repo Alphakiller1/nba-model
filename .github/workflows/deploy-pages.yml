@@ -58,6 +58,11 @@ jobs:
           restore-keys: |
             nba-games-v2-${{ runner.os }}-
 
+      # The stats.nba.com tables and the coverage capture are committed from a
+      # home network; a restore overwrites them with whatever the cache held.
+      - name: Keep committed league snapshots that are newer than the cache
+        run: python scripts/prefer_newer_snapshots.py
+
       - name: Build the board
         env:
           PYTHONIOENCODING: utf-8
