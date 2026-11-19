@@ -68,3 +68,7 @@ live board once, because a broken source is a real deploy failure.
 ## License
 
 All rights reserved — published for transparency and research review.
+
+## Live projection tracking
+
+The [weekly record and CLV](https://alphakiller1.github.io/nba-model/tracking/) retains every game and player projection, with an uncapped wager record and a frozen weekly top-20 view. See [the tracking contract](docs/PROJECTION_TRACKING.md).
